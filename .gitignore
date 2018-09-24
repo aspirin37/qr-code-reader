@@ -12,3 +12,10 @@ yarn-error.log*
 *.ntvs*
 *.njsproj
 *.sln
+
+# dotenv environment variables file
+*.env
+*.api.env.js
+
+# Webpack Stats Data
+compilation-stats.json
