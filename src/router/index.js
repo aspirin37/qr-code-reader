@@ -1,22 +1,20 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
-import Page404 from '@/components/404';
+import Vue from 'vue';
+import Router from 'vue-router';
+import QRCodeReader from '@/pages/QRCodeReader';
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
-  mode: 'history',
-  routes: [
-    {
-      path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
-    },
-    {
-      path: '*',
-      name: '404',
-      component: Page404,
-    },
-  ]
-})
+    mode: 'history',
+    routes: [
+        {
+            path: '/',
+            name: 'QRCodeReader',
+            component: QRCodeReader,
+        },
+        {
+            path: '*',
+            redirect: '/',
+        },
+    ],
+});
