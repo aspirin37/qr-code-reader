@@ -1,3 +1,5 @@
+/*eslint-disable */
+
 import { AppInsights } from "applicationinsights-js"
 
 const classifyRE = /(?:^|[-_])(\w)/g

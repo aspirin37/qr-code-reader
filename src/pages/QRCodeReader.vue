@@ -1,7 +1,14 @@
 <template>
     <div>
-        <p class="error">ERROR: {{ error }}</p>
-        <p class="decode-result">Last result: <b>{{ result }}</b></p>
+        <p
+            v-if="error"
+            class="error"
+        >
+            ERROR: {{ error }}
+        </p>
+        <p class="decode-result">
+            Last result: <b>{{ result }}</b>
+        </p>
         <qrcode-stream
             @decode="onDecode"
             @init="onInit"
@@ -11,6 +18,7 @@
 
 <script>
 import { QrcodeStream } from 'vue-qrcode-reader';
+
 export default {
     name: 'QRCodeReader',
     components: {
@@ -25,9 +33,7 @@ export default {
             this.result = result;
         },
         async onInit(promise) {
-            try {
-                await promise;
-            } catch (error) {
+            promise.catch(error => {
                 // prettier-ignore
                 switch (error.name) {
                     case 'NotAllowedError':
@@ -48,8 +54,10 @@ export default {
                     case 'StreamApiNotSupportedError':
                         this.error = 'Stream API is not supported in this browser';
                         break;
+                    default:
+                        this.error = 'Unknown';
                 }
-            }
+            });
         },
     },
 };
