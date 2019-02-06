@@ -5,5 +5,11 @@
       "useBuiltIns": "entry"
     }]
   ],
-  "plugins": ["transform-runtime"]
+  "plugins": ["transform-runtime"],
+  "env": {
+    "test": {
+      "presets": ["env"],
+      "plugins": ["transform-runtime"]
+    }
+  }
 }
