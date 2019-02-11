@@ -1,10 +1,11 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import QRCodeReader from '@/pages/QRCodeReader';
+import store from '../store';
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
     mode: 'history',
     routes: [
         {
@@ -18,3 +19,10 @@ export default new Router({
         },
     ],
 });
+
+router.beforeEach((to, from, next) => {
+    store.commit('hideMenu');
+    next();
+});
+
+export default router;

@@ -1,0 +1,70 @@
+@keyframes menu {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hamburger-menu {
+    display: inline-block;
+}
+
+$bar-width: 30px;
+$bar-height: 3px;
+$bar-spacing: 8px;
+
+.hamburger-menu,
+.hamburger-menu:after,
+.hamburger-menu:before {
+    width: $bar-width;
+    height: $bar-height;
+    border-radius: $bar-height;
+}
+
+.hamburger-menu {
+    position: relative;
+    background: white;
+
+    &.animate {
+        background: $ford-slate;
+    }
+
+    &__outer {
+        height: $bar-width;
+    }
+}
+
+.hamburger-menu:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: $bar-spacing;
+    background: white;
+    transition: bottom 0.2s 0.2s, transform 0.2s;
+}
+
+.hamburger-menu:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: $bar-spacing;
+    background: white;
+    transition: top 0.2s 0.2s, transform 0.2s;
+}
+
+.hamburger-menu.animate:after {
+    top: 0;
+    transform: rotate(45deg);
+    transition: top 0.2s, transform 0.2s 0.2s;
+}
+
+.hamburger-menu.animate:before {
+    bottom: 0;
+    transform: rotate(-45deg);
+    transition: bottom 0.2s, transform 0.2s 0.2s;
+}

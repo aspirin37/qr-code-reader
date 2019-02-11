@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="container pt-4">
         <p
             v-if="error"
             class="error"

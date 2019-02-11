@@ -1,14 +1,20 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import createLogger from 'vuex/dist/logger';
 
 Vue.use(Vuex);
-const debug = process.env.NODE_ENV !== 'production';
 
 const store = new Vuex.Store({
-    modules: {},
-    strict: debug,
-    plugins: debug ? [createLogger()] : [],
+    state: {
+        isMenuShown: false,
+    },
+    mutations: {
+        toggleMenu: state => {
+            state.isMenuShown = !state.isMenuShown;
+        },
+        hideMenu: state => {
+            state.isMenuShown = false;
+        },
+    },
 });
 
 export default store;
