@@ -13,13 +13,14 @@
             <nav
                 v-if="isMenuShown"
                 class="side-bar"
+                @click="hideMnu"
             >
                 <router-link
                     v-for="(it, i) in navigation"
                     :key="i"
+                    :to="it.link"
                     class="side-bar__link border-bottom"
                     tag="div"
-                    :to="it.link"
                 >
                     {{ it.label }}
                 </router-link>
@@ -40,7 +41,7 @@ export default {
         navigation: [
             {
                 label: 'Проверка VIN из ТТН/Акт',
-                link: '/',
+                link: '/scan-TTN',
             },
             {
                 label: 'Документы в работе',
@@ -56,6 +57,9 @@ export default {
     methods: {
         toggleMenu() {
             this.$store.commit('toggleMenu');
+        },
+        hideMnu() {
+            this.$store.commit('hideMenu');
         },
     },
 };
@@ -83,6 +87,7 @@ export default {
 
 .side-bar {
     position: absolute;
+    z-index: 1;
     top: 60px;
     display: flex;
     flex-direction: column;

@@ -1,28 +1,33 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import QRCodeReader from '@/pages/QRCodeReader';
-import store from '../store';
+import ScanTTN from '@/pages/ScanTTN';
+import CarList from '@/pages/CarList';
+import LogIn from '@/pages/LogIn';
 
 Vue.use(Router);
 
-const router = new Router({
+export default new Router({
     mode: 'history',
     routes: [
         {
-            path: '/',
-            name: 'QRCodeReader',
-            component: QRCodeReader,
+            path: '/log-in',
+            name: 'Log in',
+            component: LogIn,
+        },
+        {
+            path: '/scan-TTN',
+            name: 'Scan TTN',
+            component: ScanTTN,
+        },
+        {
+            path: '/car-list/document/:documentNumber',
+            name: 'Car list',
+            component: CarList,
+            props: true,
         },
         {
             path: '*',
-            redirect: '/',
+            redirect: '/log-in',
         },
     ],
 });
-
-router.beforeEach((to, from, next) => {
-    store.commit('hideMenu');
-    next();
-});
-
-export default router;

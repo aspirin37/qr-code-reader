@@ -26,6 +26,7 @@ module.exports = {
         "no-param-reassign": "off",
         "no-plusplus": "off",
         "vue/component-name-in-template-casing": ["error", "kebab-case"],
-        "vue/html-indent": ["error", 4]
+        "vue/html-indent": ["error", 4],
+        "operator-linebreak": "off",
     }
 }
