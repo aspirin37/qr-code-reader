@@ -1,7 +1,7 @@
 {
   "name": "QRCodeReader",
   "version": "0.0.1",
-  "description": "A Vue.js project",
+  "description": "Dispatch interface",
   "author": "Maksim Molovcev <mmolovts@ford.com>",
   "private": true,
   "scripts": {
@@ -69,13 +69,11 @@
     "webpack-merge": "^4.1.0"
   },
   "engines": {
-    "node": ">= 6.0.0",
-    "npm": ">= 3.0.0"
+    "node": ">= 8.12.0",
+    "npm": ">= 6.0.0"
   },
   "browserslist": [
-    "> 5%",
-    "last 2 versions",
-    "not ie < 11",
-    "not ie_mob < 11"
+    "Chrome >= 37",
+    "ChromeAndroid >= 37"
   ]
 }
