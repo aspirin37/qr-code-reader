@@ -1,4 +1,3 @@
-import 'core-js'; // ie11
 import Vue from 'vue';
 import bModal from 'bootstrap-vue/es/components/modal/modal';
 import VueAppInsights from './application-insights';
