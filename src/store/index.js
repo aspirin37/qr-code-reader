@@ -6,6 +6,8 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
     state: {
         isMenuShown: false,
+        errorMessage: '',
+        user: null,
     },
     mutations: {
         toggleMenu: state => {
@@ -13,6 +15,15 @@ const store = new Vuex.Store({
         },
         hideMenu: state => {
             state.isMenuShown = false;
+        },
+        logIn: (state, payload) => {
+            state.user = payload;
+        },
+        showErrorMessage: (state, payload) => {
+            state.errorMessage = payload;
+        },
+        ErrorMessage: state => {
+            state.errorMessage = '';
         },
     },
 });

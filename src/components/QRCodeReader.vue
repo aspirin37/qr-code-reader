@@ -1,15 +1,13 @@
 <template>
-    <div class="container pt-4">
+    <div>
         <p
             v-if="error"
             class="error"
         >
             ERROR: {{ error }}
         </p>
-        <p class="decode-result">
-            Last result: <b>{{ result }}</b>
-        </p>
         <qrcode-stream
+            class="mb-3"
             @decode="onDecode"
             @init="onInit"
         />
@@ -25,19 +23,23 @@ export default {
         QrcodeStream,
     },
     data: () => ({
-        result: '',
         error: '',
     }),
     methods: {
         onDecode(result) {
-            this.result = result;
+            this.$emit('scanned', result);
         },
         async onInit(promise) {
-            promise.catch(error => {
-                // prettier-ignore
-                switch (error.name) {
+            promise
+                .then(() => {
+                    this.$emit('initialized');
+                })
+                .catch(error => {
+                    /* eslint-disable */
+                    // prettier-ignore
+                    switch (error.name) {
                     case 'NotAllowedError':
-                        this.error = 'you need to grant camera access permisson';
+                        this.error = 'Please reload the app and grant camera access permisson';
                         break;
                     case 'NotFoundError':
                         this.error = 'no camera on this device';
@@ -57,7 +59,7 @@ export default {
                     default:
                         this.error = 'Unknown';
                 }
-            });
+                });
         },
     },
 };
