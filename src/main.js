@@ -1,6 +1,7 @@
 import 'core-js'; // ie11
 import Vue from 'vue';
 import bModal from 'bootstrap-vue/es/components/modal/modal';
+import VueAppInsights from './application-insights';
 
 import App from './App';
 import router from './router';
@@ -9,6 +10,18 @@ import axiosInstance from './api';
 
 import './styles/app.scss';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
+
+if (process.env.NODE_ENV === 'production') {
+    Vue.use(VueAppInsights, {
+        config: {
+            instrumentationKey: process.env.APP_INS_KEY,
+            enableDebug: process.env.APP_INS_DEBUG.toLowerCase() === 'true',
+            verboseLogging: process.env.APP_INS_VERBOSE.toLowerCase() === 'true',
+            isCookieUseDisabled: true,
+        },
+        router,
+    });
+}
 
 Vue.component('b-modal', bModal);
 Vue.prototype.$http = axiosInstance;
