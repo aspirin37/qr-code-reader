@@ -15,11 +15,12 @@ body {
     padding-bottom: 90px;
 
     &__footer {
-        position: fixed;
+        position: absolute;
         bottom: 0;
-        left: -15px;
-        width: calc(100% + 30px);
-        padding: 15px 30px;
+        left: 0;
+        z-index: 10;
+        width: 100%;
+        padding: 15px 15px;
         border-top: 1px solid rgba(0, 0, 0, 0.125);
         background-color: white;
     }

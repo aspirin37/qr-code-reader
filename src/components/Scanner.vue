@@ -1,31 +1,31 @@
 <template>
     <div>
-        <template v-if="!isScanning">
-            <div class="form-group">
-                <div class="d-flex align-items-baseline">
-                    <label class="mr-auto">
-                        {{ title }}:
-                    </label>
-                </div>
-                <input
-                    ref="input"
-                    v-model="result"
-                    class="form-control"
-                    @input="onInput"
-                >
+        <!-- <template v-if="!isScanning"> -->
+        <div class="form-group">
+            <div class="d-flex align-items-baseline">
+                <label class="mr-auto">
+                    {{ title }}:
+                </label>
             </div>
-            <button
-                class="w-100 btn btn-scan"
-                @click="isScanning = true"
+            <input
+                ref="input"
+                v-model="result"
+                class="form-control"
+                @input="onInput"
             >
-                {{ buttonTitle }}
-            </button>
-        </template>
-        <qrcode-reader
+        </div>
+        <button
+            class="w-100 btn btn-scan"
+            type="button"
+        >
+            {{ buttonTitle }}
+        </button>
+        <!-- </template> -->
+        <!-- <qrcode-reader
             v-else
             @scanned="processResult"
             @initialized="loader = false"
-        />
+        /> -->
     </div>
 </template>
 

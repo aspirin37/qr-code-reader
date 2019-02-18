@@ -1,6 +1,7 @@
 <template>
-    <div class="page">
+    <div>
         <form
+            class="page"
             v-if="!loader"
             @submit.prevent
         >
