@@ -7,7 +7,7 @@
             >
                 <span :class="['hamburger-menu', {'animate': isMenuShown}]" />
             </span>
-            <span>FordSollers <small>{{ title }}</small></span>
+            <span>FordSollers <small>{{ userArea }}</small></span>
         </div>
         <transition name="menu">
             <nav
@@ -33,6 +33,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
     name: 'AppHeader',
     components: {},
@@ -49,11 +51,7 @@ export default {
         ],
     }),
     computed: {
-        title() {
-            return this.$store.state.user
-                ? this.$store.state.user.area.description
-                : '';
-        },
+        ...mapGetters(['userArea']),
         isMenuShown() {
             return this.$store.state.isMenuShown;
         },

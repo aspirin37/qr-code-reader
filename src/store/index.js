@@ -18,6 +18,7 @@ const store = new Vuex.Store({
             state.isMenuShown = false;
         },
         logIn: (state, payload) => {
+            localStorage.user = JSON.stringify(payload);
             state.user = payload;
         },
         showErrorMessage: (state, payload) => {
@@ -25,6 +26,17 @@ const store = new Vuex.Store({
         },
         changeScannedDocumentNumber: (state, payload) => {
             state.scannedDocumentNumber = payload;
+        },
+    },
+    getters: {
+        userArea: state => {
+            if (state.user) {
+                return state.user.area.description;
+            }
+            if (localStorage.user) {
+                return JSON.parse(localStorage.user).area.description;
+            }
+            return '';
         },
     },
 });
