@@ -20,10 +20,9 @@ export default new Router({
             component: ScanTTN,
         },
         {
-            path: '/car-list/document/:documentNumber',
+            path: '/car-list',
             name: 'Car list',
             component: CarList,
-            props: true,
         },
         {
             path: '*',

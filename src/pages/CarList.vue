@@ -1,12 +1,14 @@
 <template>
-    <div class="page">
-        <template v-if="!loader">
-            <button
-                class="w-100 btn btn-lg btn-scan"
-                @click="$router.push('/car-list')"
-            >
-                Сканировать VIN
-            </button>
+    <div>
+        <form
+            class="page"
+            v-if="!loader"
+            @submit.prevent
+        >
+            <scanner
+                title="VIN-номер"
+                buttonTitle="Сканировать VIN"
+            />
             <ul class="list-group">
                 <li
                     v-for="car in carList"
@@ -34,20 +36,27 @@
                     </transition>
                 </li>
             </ul>
-            <button
-                class="w-100 btn btn-lg btn-success mt-auto"
-                :disabled="isNextStepDisabled"
-                @click="$router.push('/car-list')"
-            >
-                Далее
-            </button>
-        </template>
+            <footer class="page__footer">
+                <button
+                    class="w-100 btn btn-success mt-auto"
+                    :disabled="isNextStepDisabled"
+                >
+                    Завершить сканирование
+                </button>
+            </footer>
+        </form>
     </div>
 </template>
 
 <script>
+import Scanner from '@/components/Scanner';
+import { mapState } from 'vuex';
+
 export default {
     name: 'CarList',
+    components: {
+        Scanner,
+    },
     data: () => ({
         loader: true,
         isVinListShown: true,
@@ -55,6 +64,7 @@ export default {
         carList: null,
     }),
     computed: {
+        ...mapState(['scannedDocumentNumber']),
         isNextStepDisabled() {
             return (
                 this.carList &&
@@ -69,34 +79,23 @@ export default {
     methods: {
         async getCarList() {
             this.document = await this.$http.get(
-                `documents/number/${this.documentNumber}`,
+                `documents/number/${this.scannedDocumentNumber}`,
             );
 
-            const url = this.document.lotId
-                ? `lots/${this.lotId}/cars`
-                : `documents/${this.documentId}/cars`;
+            this.$nextTick(async () => {
+                const url = this.document.lotId
+                    ? `lots/${this.document.lotId}/cars`
+                    : `documents/${this.document.id}/cars`;
 
-            this.carList = await this.$http.get(url);
-            this.loader = false;
+                this.carList = await this.$http.get(url);
+                this.loader = false;
+            });
         },
     },
 };
 </script>
 
 <style lang="scss" scoped>
-.btn-scan {
-    margin-bottom: 15px;
-    background-color: transparent;
-    font-size: 19px;
-    text-align: left;
-    background-color: lighten($ford-slate-screen, 30%);
-    background-image: url('../assets/qr-code.svg');
-    background-repeat: no-repeat;
-    background-position: right 25px center;
-    background-size: 30px 30px;
-    box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1) inset;
-}
-
 .fade-enter-active {
     transition: all 0.15s ease-out;
 }

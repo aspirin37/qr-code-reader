@@ -8,6 +8,7 @@ const store = new Vuex.Store({
         isMenuShown: false,
         errorMessage: '',
         user: null,
+        scannedDocumentNumber: null,
     },
     mutations: {
         toggleMenu: state => {
@@ -17,13 +18,25 @@ const store = new Vuex.Store({
             state.isMenuShown = false;
         },
         logIn: (state, payload) => {
+            localStorage.user = JSON.stringify(payload);
             state.user = payload;
         },
         showErrorMessage: (state, payload) => {
             state.errorMessage = payload;
         },
-        ErrorMessage: state => {
-            state.errorMessage = '';
+        changeScannedDocumentNumber: (state, payload) => {
+            state.scannedDocumentNumber = payload;
+        },
+    },
+    getters: {
+        userArea: state => {
+            if (state.user) {
+                return state.user.area.description;
+            }
+            if (localStorage.user) {
+                return JSON.parse(localStorage.user).area.description;
+            }
+            return '';
         },
     },
 });
