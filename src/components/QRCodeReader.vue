@@ -1,15 +1,13 @@
 <template>
-    <div class="container pt-4">
+    <div class="qr-reader">
         <p
             v-if="error"
             class="error"
         >
             ERROR: {{ error }}
         </p>
-        <p class="decode-result">
-            Last result: <b>{{ result }}</b>
-        </p>
         <qrcode-stream
+            class="mb-3"
             @decode="onDecode"
             @init="onInit"
         />
@@ -25,19 +23,23 @@ export default {
         QrcodeStream,
     },
     data: () => ({
-        result: '',
         error: '',
     }),
     methods: {
         onDecode(result) {
-            this.result = result;
+            this.$emit('scanned', result);
         },
         async onInit(promise) {
-            promise.catch(error => {
-                // prettier-ignore
-                switch (error.name) {
+            /* eslint-disable */
+            // prettier-ignore
+            promise
+                .then(() => {
+                    this.$emit('initialized');
+                })
+                .catch(error => {
+                    switch (error.name) {
                     case 'NotAllowedError':
-                        this.error = 'you need to grant camera access permisson';
+                        this.error = 'Please reload the app and grant camera access permisson';
                         break;
                     case 'NotFoundError':
                         this.error = 'no camera on this device';
@@ -64,6 +66,17 @@ export default {
 </script>
 
 <style scoped>
+.qr-reader {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 60px);
+    padding: 15px;
+    background: white;
+    z-index: 50;
+}
+
 .error {
     font-weight: bold;
     color: red;

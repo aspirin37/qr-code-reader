@@ -1,16 +1,14 @@
-import 'core-js'; // ie11
 import Vue from 'vue';
 import bModal from 'bootstrap-vue/es/components/modal/modal';
+import VueAppInsights from './application-insights';
 
 import App from './App';
 import router from './router';
 import store from './store';
-import VueAppInsights from './application-insights';
+import axiosInstance from './api';
 
 import './styles/app.scss';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
-
-Vue.component('b-modal', bModal);
 
 if (process.env.NODE_ENV === 'production') {
     Vue.use(VueAppInsights, {
@@ -24,7 +22,8 @@ if (process.env.NODE_ENV === 'production') {
     });
 }
 
-Vue.config.productionTip = false;
+Vue.component('b-modal', bModal);
+Vue.prototype.$http = axiosInstance;
 
 /* eslint-disable no-new */
 new Vue({

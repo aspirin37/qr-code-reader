@@ -7,19 +7,20 @@
             >
                 <span :class="['hamburger-menu', {'animate': isMenuShown}]" />
             </span>
-            <span>FordSollers <small>{{ title }}</small></span>
+            <span>FordSollers <small>{{ userArea }}</small></span>
         </div>
         <transition name="menu">
             <nav
                 v-if="isMenuShown"
                 class="side-bar"
+                @click="hideMnu"
             >
                 <router-link
                     v-for="(it, i) in navigation"
                     :key="i"
+                    :to="it.link"
                     class="side-bar__link border-bottom"
                     tag="div"
-                    :to="it.link"
                 >
                     {{ it.label }}
                 </router-link>
@@ -32,15 +33,16 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
     name: 'AppHeader',
     components: {},
     data: () => ({
-        title: 'Елабуга',
         navigation: [
             {
                 label: 'Проверка VIN из ТТН/Акт',
-                link: '/',
+                link: '/scan-TTN',
             },
             {
                 label: 'Документы в работе',
@@ -49,6 +51,7 @@ export default {
         ],
     }),
     computed: {
+        ...mapGetters(['userArea']),
         isMenuShown() {
             return this.$store.state.isMenuShown;
         },
@@ -57,10 +60,20 @@ export default {
         toggleMenu() {
             this.$store.commit('toggleMenu');
         },
+        hideMnu() {
+            this.$store.commit('hideMenu');
+        },
     },
 };
 </script>
 <style lang="scss" scoped>
+header {
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    width: 100%;
+}
+
 .navbar {
     position: relative;
     height: 60px;
@@ -83,6 +96,7 @@ export default {
 
 .side-bar {
     position: absolute;
+    z-index: 1;
     top: 60px;
     display: flex;
     flex-direction: column;
