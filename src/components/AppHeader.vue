@@ -37,7 +37,6 @@ export default {
     name: 'AppHeader',
     components: {},
     data: () => ({
-        title: 'Елабуга',
         navigation: [
             {
                 label: 'Проверка VIN из ТТН/Акт',
@@ -50,6 +49,11 @@ export default {
         ],
     }),
     computed: {
+        title() {
+            return this.$store.state.user
+                ? this.$store.state.user.area.description
+                : '';
+        },
         isMenuShown() {
             return this.$store.state.isMenuShown;
         },
@@ -65,6 +69,13 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+header {
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    width: 100%;
+}
+
 .navbar {
     position: relative;
     height: 60px;

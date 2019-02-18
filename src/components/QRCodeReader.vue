@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="qr-reader">
         <p
             v-if="error"
             class="error"
@@ -30,13 +30,13 @@ export default {
             this.$emit('scanned', result);
         },
         async onInit(promise) {
+            /* eslint-disable */
+            // prettier-ignore
             promise
                 .then(() => {
                     this.$emit('initialized');
                 })
                 .catch(error => {
-                    /* eslint-disable */
-                    // prettier-ignore
                     switch (error.name) {
                     case 'NotAllowedError':
                         this.error = 'Please reload the app and grant camera access permisson';
@@ -59,13 +59,24 @@ export default {
                     default:
                         this.error = 'Unknown';
                 }
-                });
+            });
         },
     },
 };
 </script>
 
 <style scoped>
+.qr-reader {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 60px);
+    padding: 15px;
+    background: white;
+    z-index: 50;
+}
+
 .error {
     font-weight: bold;
     color: red;

@@ -8,6 +8,7 @@ const store = new Vuex.Store({
         isMenuShown: false,
         errorMessage: '',
         user: null,
+        scannedDocumentNumber: null,
     },
     mutations: {
         toggleMenu: state => {
@@ -22,8 +23,8 @@ const store = new Vuex.Store({
         showErrorMessage: (state, payload) => {
             state.errorMessage = payload;
         },
-        ErrorMessage: state => {
-            state.errorMessage = '';
+        changeScannedDocumentNumber: (state, payload) => {
+            state.scannedDocumentNumber = payload;
         },
     },
 });

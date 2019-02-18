@@ -1,47 +1,32 @@
 <template>
-    <div class="page">
-        <qrcode-reader
-            @scanned="processResult"
-            @initialized="loader = false"
+    <form
+        class="page"
+        @submit.prevent="goToCarList"
+    >
+        <scanner
+            title="Номер TTN"
+            buttonTitle="Сканировать TTN"
+            @input="processResult"
         />
-        <template v-if="!loader">
-            <div class="form-group">
-                <div class="d-flex align-items-baseline">
-                    <label class="mr-auto">
-                        Номер ТТН/Акта:
-                    </label>
-                    <small
-                        class="text-primary"
-                        @click="enableManualInput"
-                    >
-                        Ручной ввод
-                    </small>
-                </div>
-                <input
-                    ref="input"
-                    v-model="result"
-                    :disabled="!isManual"
-                    class="form-control"
-                >
-            </div>
+        <footer class="page__footer">
             <button
-                class="w-100 btn btn-lg btn-success mt-auto"
+                class="w-100 btn btn-success mt-auto"
                 :disabled="!result"
-                @click="goToCarList"
+                type="submit"
             >
                 Далее
             </button>
-        </template>
-    </div>
+        </footer>
+    </form>
 </template>
 
 <script>
-import QRCodeReader from '@/components/QRCodeReader';
+import Scanner from '@/components/Scanner';
 
 export default {
     name: 'ScanTTN',
     components: {
-        'qrcode-reader': QRCodeReader,
+        Scanner,
     },
     data: () => ({
         result: '',
@@ -49,21 +34,13 @@ export default {
         isManual: false,
     }),
     methods: {
-        processResult(result) {
-            this.result = result;
-            this.isManual = false;
-        },
-        enableManualInput() {
-            this.isManual = true;
-            this.$nextTick(() => {
-                this.$refs.input.focus();
-            });
-        },
         goToCarList() {
-            this.$router.push({
-                name: 'Car list',
-                params: { documentNumber: this.result },
-            });
+            this.$router.push('/car-list');
+            this.$store.commit('changeScannedDocumentNumber', this.result);
+        },
+        processResult(result, isManual) {
+            this.result = result;
+            this.isManual = isManual;
         },
     },
 };
