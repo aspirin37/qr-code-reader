@@ -66,8 +66,8 @@ export default {
     data: () => ({
         isManual: false,
         loader: false,
-        result: '4A3AK24F26E019019',
-        isModalShown: true,
+        result: '',
+        isModalShown: false,
     }),
     computed: {
         ...mapState(['isScanScreenShown']),
