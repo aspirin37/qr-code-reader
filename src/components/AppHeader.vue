@@ -68,8 +68,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 header {
-    position: relative;
+    position: fixed;
     z-index: 100;
+    top: 0;
+    left: 0;
     width: 100%;
 }
 
