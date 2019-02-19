@@ -4,8 +4,8 @@
         @submit.prevent="goToCarList"
     >
         <scanner
-            title="Номер TTN"
-            buttonTitle="Сканировать TTN"
+            title="Номер ТТН"
+            buttonTitle="Сканировать ТТН"
             :value="documentNumber"
             @input="processResult"
         />
