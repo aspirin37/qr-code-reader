@@ -5,9 +5,11 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
     state: {
+        user: null,
         isMenuShown: false,
         errorMessage: '',
-        user: null,
+        isErrorShown: false,
+        isScanScreenShown: false,
         scannedDocumentNumber: null,
     },
     mutations: {
@@ -23,9 +25,22 @@ const store = new Vuex.Store({
         },
         showErrorMessage: (state, payload) => {
             state.errorMessage = payload;
+            state.isErrorShown = true;
+        },
+        clearErrorMessage: state => {
+            state.errorMessage = '';
+            state.isErrorShown = false;
         },
         changeScannedDocumentNumber: (state, payload) => {
             state.scannedDocumentNumber = payload;
+        },
+        showScanScreen: state => {
+            state.isScanScreenShown = true;
+        },
+        hideScanScreen: state => {
+            state.isScanScreenShown = false;
+            state.errorMessage = '';
+            state.isErrorShown = false;
         },
     },
     getters: {

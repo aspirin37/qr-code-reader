@@ -1,11 +1,5 @@
 <template>
     <div class="qr-reader">
-        <p
-            v-if="error"
-            class="error"
-        >
-            ERROR: {{ error }}
-        </p>
         <qrcode-stream
             class="mb-3"
             @decode="onDecode"
@@ -22,9 +16,6 @@ export default {
     components: {
         QrcodeStream,
     },
-    data: () => ({
-        error: '',
-    }),
     methods: {
         onDecode(result) {
             this.$emit('scanned', result);
@@ -37,29 +28,32 @@ export default {
                     this.$emit('initialized');
                 })
                 .catch(error => {
+                    let errorMessage;
+
                     switch (error.name) {
                     case 'NotAllowedError':
-                        this.error = 'Please reload the app and grant camera access permisson';
+                        errorMessage = 'Для работы с приложением предоставьте ему права доступа к камере в настройках вашего браузера';
                         break;
                     case 'NotFoundError':
-                        this.error = 'no camera on this device';
+                        errorMessage = 'Камера не найдена';
                         break;
                     case 'NotSupportedError':
-                        this.error = 'secure context required (HTTPS, localhost)';
+                        errorMessage = 'Небезопасное соединение! (Требуется https, localhost)';
                         break;
                     case 'NotReadableError':
-                        this.error = 'is the camera already in use?';
+                        errorMessage = 'Возможно, камера уже используется другим приложением';
                         break;
                     case 'OverconstrainedError':
-                        this.error = 'installed cameras are not suitable';
+                        errorMessage = 'Установленная камера не поддерживается приложением';
                         break;
                     case 'StreamApiNotSupportedError':
-                        this.error = 'Stream API is not supported in this browser';
+                        errorMessage = 'Ваш браузер не поддерживается приложением';
                         break;
                     default:
-                        this.error = 'Unknown';
-                }
-            });
+                        errorMessage = 'Unknown';
+                    }
+                    this.$store.commit('showErrorMessage', errorMessage)
+                });
         },
     },
 };
@@ -68,13 +62,15 @@ export default {
 <style scoped>
 .qr-reader {
     position: absolute;
-    top: 60px;
+    top: 0;
     left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     width: 100%;
-    height: calc(100vh - 60px);
-    padding: 15px;
-    background: white;
-    z-index: 50;
+    height: 100vh;
+    background: black;
+    z-index: 200;
 }
 
 .error {

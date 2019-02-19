@@ -26,6 +26,19 @@ body {
     }
 }
 
+.fade-enter-active {
+    transition: all 0.15s ease-out;
+}
+
+.fade-leave-active {
+    transition: all 0.15s ease-in;
+}
+
+.fade-enter,
+.fade-leave-active {
+    opacity: 0;
+}
+
 .btn {
     font-size: 1.1rem;
 }

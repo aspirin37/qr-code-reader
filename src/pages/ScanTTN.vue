@@ -22,6 +22,7 @@
 
 <script>
 import Scanner from '@/components/Scanner';
+import { mapState } from 'vuex';
 
 export default {
     name: 'ScanTTN',
@@ -33,6 +34,9 @@ export default {
         loader: true,
         isManual: false,
     }),
+    computed: {
+        ...mapState(['isScanScreenShown']),
+    },
     methods: {
         goToCarList() {
             this.$router.push('/car-list');
@@ -42,6 +46,14 @@ export default {
             this.result = result;
             this.isManual = isManual;
         },
+    },
+    beforeRouteLeave(to, from, next) {
+        if (this.isScanScreenShown) {
+            this.$store.commit('hideScanScreen');
+            next(false);
+        } else {
+            next();
+        }
     },
 };
 </script>
