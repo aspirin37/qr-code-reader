@@ -6,12 +6,13 @@
         <scanner
             title="Номер TTN"
             buttonTitle="Сканировать TTN"
+            :value="documentNumber"
             @input="processResult"
         />
         <footer class="page__footer">
             <button
                 class="w-100 btn btn-success mt-auto"
-                :disabled="!result"
+                :disabled="!documentNumber"
                 type="submit"
             >
                 Далее
@@ -22,6 +23,7 @@
 
 <script>
 import Scanner from '@/components/Scanner';
+import { mapState } from 'vuex';
 
 export default {
     name: 'ScanTTN',
@@ -29,19 +31,41 @@ export default {
         Scanner,
     },
     data: () => ({
-        result: '',
+        documentNumber: '',
+        document: null,
         loader: true,
         isManual: false,
     }),
+    computed: {
+        ...mapState(['isScanScreenShown']),
+    },
     methods: {
-        goToCarList() {
-            this.$router.push('/car-list');
-            this.$store.commit('changeScannedDocumentNumber', this.result);
+        async goToCarList() {
+            try {
+                this.document = await this.$http.get(
+                    `documents/number/${this.documentNumber}`,
+                );
+                this.$router.push('/car-list');
+                this.$store.commit('changeScannedDocument', this.document);
+            } catch (err) {
+            } finally {
+                setTimeout(() => {
+                    this.documentNumber = '';
+                }, 300);
+            }
         },
         processResult(result, isManual) {
-            this.result = result;
+            this.documentNumber = result;
             this.isManual = isManual;
         },
+    },
+    beforeRouteLeave(to, from, next) {
+        if (this.isScanScreenShown) {
+            this.$store.commit('hideScanScreen');
+            next(false);
+        } else {
+            next();
+        }
     },
 };
 </script>

@@ -60,11 +60,10 @@ export default {
     data: () => ({
         loader: true,
         isVinListShown: true,
-        document: null,
         carList: null,
     }),
     computed: {
-        ...mapState(['scannedDocumentNumber']),
+        ...mapState(['scannedDocument', 'isScanScreenShown']),
         isNextStepDisabled() {
             return (
                 this.carList &&
@@ -78,37 +77,30 @@ export default {
     },
     methods: {
         async getCarList() {
-            this.document = await this.$http.get(
-                `documents/number/${this.scannedDocumentNumber}`,
-            );
+            const url = this.scannedDocument.lotId
+                ? `lots/${this.scannedDocument.lotId}/cars`
+                : `documents/${this.scannedDocument.id}/cars`;
 
-            this.$nextTick(async () => {
-                const url = this.document.lotId
-                    ? `lots/${this.document.lotId}/cars`
-                    : `documents/${this.document.id}/cars`;
-
+            try {
                 this.carList = await this.$http.get(url);
+            } catch (err) {
+            } finally {
                 this.loader = false;
-            });
+            }
         },
+    },
+    beforeRouteLeave(to, from, next) {
+        if (this.isScanScreenShown) {
+            this.$store.commit('hideScanScreen');
+            next(false);
+        } else {
+            next();
+        }
     },
 };
 </script>
 
 <style lang="scss" scoped>
-.fade-enter-active {
-    transition: all 0.15s ease-out;
-}
-
-.fade-leave-active {
-    transition: all 0.15s ease-in;
-}
-
-.fade-enter,
-.fade-leave-active {
-    opacity: 0;
-}
-
 .scanned {
     $scanned: #e1ffe8;
     background-color: $scanned;

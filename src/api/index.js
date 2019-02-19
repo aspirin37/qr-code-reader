@@ -11,15 +11,18 @@ axiosInstance.interceptors.request.use(
     config => config,
     error => {
         store.commit('showErrorMessage', error);
-        return Promise.reject(error);
+        Promise.reject(response);
     },
 );
 
 axiosInstance.interceptors.response.use(
-    response => response.data,
+    response => {
+        if (response.statusCode === 404) return Promise.reject(response);
+        return response.data;
+    },
     error => {
         store.commit('showErrorMessage', error);
-        return Promise.reject(error);
+        Promise.reject(response);
     },
 );
 

@@ -1,13 +1,19 @@
 <template>
     <div id="app">
         <app-header />
+        <!-- <transition
+            name="fade"
+            mode="out-in"
+        > -->
         <router-view />
+        <!-- </transition> -->
         <b-modal
-            v-model="isErrorShown"
+            v-model="isModalShown"
             header-border-variant="danger"
-            title="Ошибка соединения"
+            title="Ошибка"
             ok-only
             centered
+            @hidden="hideScanScreen"
         >
             {{ errorMessage }}
         </b-modal>
@@ -24,14 +30,19 @@ export default {
         AppHeader,
     },
     data: () => ({
-        isErrorShown: false,
+        isModalShown: false,
     }),
     computed: {
-        ...mapState(['isMenuShown', 'errorMessage']),
+        ...mapState(['isMenuShown', 'errorMessage', 'isErrorShown']),
+    },
+    methods: {
+        hideScanScreen() {
+            this.$store.commit('hideScanScreen');
+        },
     },
     watch: {
-        errorMessage(error) {
-            this.isErrorShown = !!error;
+        isErrorShown(val) {
+            this.isModalShown = val;
         },
     },
 };

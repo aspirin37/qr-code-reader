@@ -1,36 +1,52 @@
 <template>
     <div>
-        <!-- <template v-if="!isScanning"> -->
-        <div class="form-group">
-            <div class="d-flex align-items-baseline">
-                <label class="mr-auto">
-                    {{ title }}:
-                </label>
+        <template>
+            <div class="form-group">
+                <div class="d-flex align-items-baseline">
+                    <label class="mr-auto">
+                        {{ title }}:
+                    </label>
+                </div>
+                <input
+                    ref="input"
+                    v-model="result"
+                    class="form-control"
+                    @input="onInput"
+                >
             </div>
-            <input
-                ref="input"
-                v-model="result"
-                class="form-control"
-                @input="onInput"
+            <button
+                class="w-100 btn btn-scan"
+                type="button"
+                @click="startScanning"
             >
-        </div>
-        <button
-            class="w-100 btn btn-scan"
-            type="button"
+                {{ buttonTitle }}
+            </button>
+        </template>
+        <transition name="fade">
+            <qrcode-reader
+                v-if="isScanScreenShown"
+                @scanned="processResult"
+                @initialized="loader = false"
+            />
+        </transition>
+        <b-modal
+            v-model="isModalShown"
+            class="text-center"
+            header-border-variant="success"
+            title="Готово!"
+            ok-only
+            centered
+            @hidden="stopScanning"
         >
-            {{ buttonTitle }}
-        </button>
-        <!-- </template> -->
-        <!-- <qrcode-reader
-            v-else
-            @scanned="processResult"
-            @initialized="loader = false"
-        /> -->
+            <h4 class="font-weight-normal">{{ title }}</h4>
+            <h5>{{ result }}</h5>
+        </b-modal>
     </div>
 </template>
 
 <script>
 import QRCodeReader from '@/components/QRCodeReader';
+import { mapState } from 'vuex';
 
 export default {
     name: 'Scanner',
@@ -46,24 +62,46 @@ export default {
             type: String,
             required: true,
         },
+        value: {
+            type: String,
+            default: '',
+        },
     },
     data: () => ({
         isManual: false,
-        isScanning: false,
+        loader: false,
         result: '',
+        isModalShown: false,
     }),
+    computed: {
+        ...mapState(['isScanScreenShown']),
+    },
     watch: {
         result(val) {
             this.$emit('input', this.result, this.isManual);
+        },
+        value(val) {
+            this.result = val;
+            this.isManual = false;
         },
     },
     methods: {
         onInput() {
             this.isManual = true;
         },
+        startScanning() {
+            this.loader = true;
+            this.$store.commit('showScanScreen');
+        },
         processResult(result) {
-            this.result = result;
-            this.isManual = false;
+            if (result) {
+                this.result = result;
+                this.isManual = false;
+                this.isModalShown = true;
+            }
+        },
+        stopScanning() {
+            this.$store.commit('hideScanScreen');
         },
     },
 };
