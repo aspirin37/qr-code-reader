@@ -63,40 +63,6 @@ paths:
             $ref: '#/definitions/ErrorResponse'
       produces:
         - application/json
-    put:
-      description: put-cars-from-lot
-      operationId: put-cars-from-lot
-      summary: put-cars-from-lot
-      tags:
-        - cars
-      parameters:
-        - name: lotId
-          in: path
-          required: true
-          type: string
-        - name: lotCarsPatchObject
-          in: body
-          schema:
-            $ref: '#/definitions/LotCarsPatchObject'
-      consumes:
-        - application/json
-      responses:
-        '204':
-          description: Successfully update cars
-        '403':
-          description: area does not assign to current user
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '404':
-          description: Document not found
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '501':
-          description: Document does not ready to dispatch
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-      produces:
-        - application/json
   '/documents/{documentId}/cars':
     get:
       description: get-cars-from-document
@@ -120,75 +86,6 @@ paths:
             $ref: '#/definitions/ErrorResponse'
         '501':
           description: document or cars at document does not ready for dispatch
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-      produces:
-        - application/json
-    put:
-      description: put-cars-from-document
-      operationId: put-cars-from-document
-      summary: put-cars-from-document
-      tags:
-        - cars
-      parameters:
-        - name: documentId
-          in: path
-          required: true
-          type: string
-        - name: documentCarsPatchObject
-          in: body
-          schema:
-            $ref: '#/definitions/DocumentCarsPatchObject'
-      consumes:
-        - application/json
-      responses:
-        '204':
-          description: Successfully update cars
-        '403':
-          description: area does not assign to current user
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '404':
-          description: Document not found
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '501':
-          description: Document does not ready to dispatch
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-      produces:
-        - application/json
-  '/documents/{documentId}':
-    put:
-      description: put-document
-      operationId: put-document
-      summary: put-document
-      tags:
-        - documents
-      parameters:
-        - name: documentId
-          in: path
-          required: true
-          type: string
-        - name: documentPatchObject
-          in: body
-          schema:
-            $ref: '#/definitions/DocumentPatchObject'
-      consumes:
-        - application/json
-      responses:
-        '204':
-          description: Successfully update document
-        '403':
-          description: area does not assign to current user
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '404':
-          description: Document not found
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '501':
-          description: Document does not ready to dispatch
           schema:
             $ref: '#/definitions/ErrorResponse'
       produces:
@@ -276,10 +173,10 @@ paths:
           in: path
           required: true
           type: string
-        - name: carPatchObject
+        - name: carObject
           in: body
           schema:
-            $ref: '#/definitions/CarPatchObject'
+            $ref: '#/definitions/CarObject'
       consumes:
         - application/json
       responses:
@@ -299,11 +196,36 @@ paths:
             $ref: '#/definitions/ErrorResponse'
       produces:
         - application/json
-  '/lots/{lotId}/with-documents':
+  '/lots/{lotId}/documents':
     get:
-      description: get-lot-with-documents
-      operationId: get-lot-with-documents
-      summary: get-lot-with-documents
+      description: get-documents-from-lot
+      operationId: get-documents-from-lot
+      summary: get-documents-from-lot
+      tags:
+        - documents
+      parameters:
+        - name: lotId
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successfully return
+          schema:
+            $ref: '#/definitions/DocumentsList'
+        '204':
+          description: documents collection empty
+        '404':
+          description: lot not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      produces:
+        - application/json
+  '/lots/{lotId}':
+    get:
+      description: get-lot
+      operationId: get-lot
+      summary: get-lot
       tags:
         - lots
       parameters:
@@ -313,9 +235,9 @@ paths:
           type: string
       responses:
         '200':
-          description: Successfully return lot and documents
+          description: Successfully return lot
           schema:
-            $ref: '#/definitions/LotWithDocumentsObject'
+            $ref: '#/definitions/LotObject'
         '404':
           description: Lot not found
           schema:
@@ -361,7 +283,7 @@ definitions:
         description: Всеволожск
         passRequired: true
         manualInputPass: '9102'
-  LotWithDocumentsObject:
+  LotObject:
     type: object
     required:
       - areaId
@@ -375,28 +297,11 @@ definitions:
         type: string
       areaPassNumber:
         type: string
-      documents:
-        $ref: '#/definitions/DocumentsList'
     example:
       areaId: e8bd66b6-c6eb-4b93-818b-40fb1381401f
       id: 6d9dafd4-9ce3-47ce-85b8-dc35dac338de
       userName: AKOROLE7
       areaPassNumber: 6
-      documents:
-        - id: 8bcfc9e5-ca11-42d5-a3a9-f3e1d150c226
-          number: ES-123456
-          description: ES-123456
-          lotId: 6d9dafd4-9ce3-47ce-85b8-dc35dac338de
-          userName: SSIDOROV
-          status: pre-scan
-          manualInput: false
-        - id: 2235dfbb-dcac-4b57-a63d-2ce121603244
-          number: DK659874
-          description: DK-659874
-          lotId: 6d9dafd4-9ce3-47ce-85b8-dc35dac338de
-          userName: IIVANOV
-          status: pre-scan
-          manualInput: true
   DocumentObject:
     type: object
     required:
@@ -413,123 +318,51 @@ definitions:
         type: string
       userName:
         type: string
-      status:
-        type: string
-        enum:
-          - pre-scan
-          - dispatch
-      manualInput:
-        type: boolean
     example:
       id: 8bcfc9e5-ca11-42d5-a3a9-f3e1d150c226
       number: ES123456
       description: ES-123456
       lotId: null
       userName: AALEXAN
-      status: ''
-      manualInput: false
   DocumentsList:
     type: array
     items:
-      $ref: '#/definitions/DocumentObject'
+      type: object
+      required:
+        - id
+        - number
+      properties:
+        id:
+          type: string
+        number:
+          type: string
+        description:
+          type: string
+        lotId:
+          type: string
+        userName:
+          type: string
     example:
       - id: 8bcfc9e5-ca11-42d5-a3a9-f3e1d150c226
         number: ES-123456
         description: ES-123456
         lotId: 6d9dafd4-9ce3-47ce-85b8-dc35dac338de
         userName: SSIDOROV
-        status: pre-scan
-        manualInput: false
       - id: 2235dfbb-dcac-4b57-a63d-2ce121603244
         number: DK659874
         description: DK-659874
         lotId: 6d9dafd4-9ce3-47ce-85b8-dc35dac338de
         userName: IIVANOV
-        status: pre-scan
-        manualInput: true
-  DocumentPatchObject:
-    type: object
-    required:
-      - status
-    properties:
-      status:
-        type: string
-        enum:
-          - dispatch
-      manualInput:
-        type: boolean
-    example: "{\r\n  \"status\": \"dispatch\",\r\n  \"manualInput\": false\r\n}"
-  LotCarsPatchObject:
-    type: array
-    items:
-      type: object
-      required:
-        - VIN
-        - status
-        - documentId
-      properties:
-        scannedVIN:
-          type: string
-        documentId:
-          type: string
-        manualInput:
-          type: boolean
-        status:
-          type: string
-          enum:
-            - pre-scan
-      example:
-        - scannedVIN: Z6FXXXESGXHJ56977
-          documentId: 2235dfbb-dcac-4b57-a63d-2ce121603244
-          manualInput: false
-          status: pre-scan
-        - scannedVIN: Z6FBXXESWBFY34440
-          documentId: 6d9dafd4-9ce3-47ce-85b8-dc35dac338de
-          manualInput: false
-          status: pre-scan
-        - scannedVIN: Z6FLXXECHLGD22011
-          documentId: 6d9dafd4-9ce3-47ce-85b8-dc35dac338de
-          manualInput: true
-          status: pre-scan
-  DocumentCarsPatchObject:
-    type: array
-    items:
-      type: object
-      required:
-        - VIN
-        - status
-      properties:
-        scannedVIN:
-          type: string
-        manualInput:
-          type: boolean
-        status:
-          type: string
-          enum:
-            - pre-scan
-      example:
-        - scannedVIN: Z6FXXXESGXHJ56977
-          manualInput: false
-          status: pre-scan
-        - scannedVIN: Z6FBXXESWBFY34440
-          manualInput: false
-          status: pre-scan
-        - scannedVIN: Z6FLXXECHLGD22011
-          manualInput: true
-          status: pre-scan
   CarObject:
     type: object
     required:
-      - VIN
       - documentId
     properties:
       VIN:
         type: string
-      model:
-        type: string
-      color:
-        type: string
       documentId:
+        type: string
+      lotId:
         type: string
       manualInput:
         type: boolean
@@ -539,50 +372,59 @@ definitions:
           - pre-scan
           - compound out
           - compound in
-    example:
-      VIN: Z6FXXXESGXHJ56977
-      model: Transit Van
-      color: Белый
-      documentId: a7473c33-0f1d-43f0-898b-cf826e77df8e
-      manualInput: false
-      status: null
-  CarPatchObject:
-    type: object
-    required:
-      - status
-    properties:
-      documentId:
+      model:
         type: string
-      manualInput:
-        type: boolean
-      status:
+      color:
         type: string
-        enum:
-          - compound in
-    example: "{\r\n  \"documentId\": \"a7473c33-0f1d-43f0-898b-cf826e77df8e\",\r\n  \"manualInput\": false,\r\n  \"status\": \"compound in\"\r\n}"
+    example: "{\r\n  \"VIN\": \"Z6FXXXESGXHJ56977\",\r\n  \"documentId\": \"a7473c33-0f1d-43f0-898b-cf826e77df8e\",\r\n  \"lotId\": \"b8273c22-0f1d-43f0-898b-cf826e77df81\",\r\n  \"manualInput\": false,\r\n  \"status\": \"compound in\",\r\n  \"model\": \"Transit Van\",\r\n  \"color\": \"Белый\"\r\n}"
   CarsList:
     type: array
     items:
-      $ref: '#/definitions/CarObject'
+      type: object
+      required:
+        - VIN
+        - documentId
+      properties:
+        VIN:
+          type: string
+        documentId:
+          type: string
+        lotId:
+          type: string
+        manualInput:
+          type: boolean
+        status:
+          type: string
+          enum:
+            - pre-scan
+            - compound out
+            - compound in
+        model:
+          type: string
+        color:
+          type: string
     example:
       - VIN: Z6FXXXESGXHJ56977
+        documentId: a7473c33-0f1d-43f0-898b-cf826e77df8e
+        lotId: d7473c33-0f1d-43f0-898b-cf826e77df85
+        manualInput: false
+        status: ''
         model: Transit Van
         color: Белый
-        documentId: a7473c33-0f1d-43f0-898b-cf826e77df8e
-        manualInput: false
-        status: ''
       - VIN: Z6FBXXESWBFY34440
-        model: Ecosport
-        color: Белый
         documentId: 9da10d53-0827-4916-9a6d-ec260e21bb95
+        lotId: 8da10d53-0827-4916-9a6d-ec260e21bb94
         manualInput: false
         status: ''
-      - VIN: Z6FLXXECHLGD22011
         model: Ecosport
         color: Белый
+      - VIN: Z6FLXXECHLGD22011
         documentId: 9da10d53-0827-4916-9a6d-ec260e21bb95
+        lotId: 3da10d53-0827-4916-9a6d-ec260e21bb98
         manualInput: true
         status: pre-scan
+        model: Ecosport
+        color: Белый
   ErrorResponse:
     type: object
     required:
