@@ -1,8 +1,5 @@
 <template>
-    <form
-        class="page"
-        @submit.prevent="goToCarList"
-    >
+    <div class="page">
         <scanner
             title="Номер ТТН"
             buttonTitle="Сканировать ТТН"
@@ -13,12 +10,12 @@
             <button
                 class="w-100 btn btn-success mt-auto"
                 :disabled="!documentNumber"
-                type="submit"
+                @click="goToCarList"
             >
                 Далее
             </button>
         </footer>
-    </form>
+    </div>
 </template>
 
 <script>

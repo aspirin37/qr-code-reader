@@ -1,4 +1,5 @@
 <template>
+    <!-- :class="{'position-fixed': isMenuShown}" -->
     <header>
         <div class="navbar">
             <span
@@ -68,10 +69,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 header {
-    position: fixed;
+    position: relative;
     z-index: 100;
-    top: 0;
-    left: 0;
     width: 100%;
 }
 

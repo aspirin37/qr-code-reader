@@ -68,7 +68,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     width: 100%;
-    height: calc(100vh - 116px);
+    height: calc(100vh - 56px);
     background: black;
     z-index: 200;
 }

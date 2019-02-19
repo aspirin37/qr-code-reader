@@ -1,50 +1,47 @@
 <template>
-    <div>
-        <form
-            class="page"
-            v-if="!loader"
-            @submit.prevent
-        >
-            <scanner
-                title="VIN-номер"
-                buttonTitle="Сканировать VIN"
-            />
-            <ul class="list-group">
-                <li
-                    v-for="car in carList"
-                    :key="car.VIN"
-                    class="list-group-item d-flex"
-                    :class="{'scanned': car.status === 'scanned'}"
-                    @click="isVinListShown = !isVinListShown"
+    <div
+        class="page"
+        v-if="!loader"
+    >
+        <scanner
+            title="VIN-номер"
+            buttonTitle="Сканировать VIN"
+        />
+        <ul class="list-group">
+            <li
+                v-for="car in carList"
+                :key="car.VIN"
+                class="list-group-item d-flex"
+                :class="{'scanned': car.status === 'scanned'}"
+                @click="isVinListShown = !isVinListShown"
+            >
+                <transition
+                    name="fade"
+                    mode="out-in"
                 >
-                    <transition
-                        name="fade"
-                        mode="out-in"
+                    <div
+                        v-if="isVinListShown"
+                        key="vinList"
                     >
-                        <div
-                            v-if="isVinListShown"
-                            key="vinList"
-                        >
-                            {{ car.VIN }}
-                        </div>
-                        <div
-                            v-else
-                            key="modelList"
-                        >
-                            {{ car.model }} <small>{{ car.color }}</small>
-                        </div>
-                    </transition>
-                </li>
-            </ul>
-            <footer class="page__footer">
-                <button
-                    class="w-100 btn btn-success mt-auto"
-                    :disabled="isNextStepDisabled"
-                >
-                    Завершить сканирование
-                </button>
-            </footer>
-        </form>
+                        {{ car.VIN }}
+                    </div>
+                    <div
+                        v-else
+                        key="modelList"
+                    >
+                        {{ car.model }} <small>{{ car.color }}</small>
+                    </div>
+                </transition>
+            </li>
+        </ul>
+        <footer class="page__footer">
+            <button
+                class="w-100 btn btn-success mt-auto"
+                :disabled="isNextStepDisabled"
+            >
+                Завершить сканирование
+            </button>
+        </footer>
     </div>
 </template>
 
