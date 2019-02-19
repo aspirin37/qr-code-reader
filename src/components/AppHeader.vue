@@ -101,7 +101,7 @@ header {
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: calc(100vh - 60px);
+    height: calc(100vh - 116px);
     background-color: #f8f9fa;
 
     &__link {
