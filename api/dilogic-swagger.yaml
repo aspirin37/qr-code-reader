@@ -1,0 +1,604 @@
+swagger: '2.0'
+info:
+  title: Dilogic dispatch
+  version: '1.0'
+  description: Dilogic dispatch API
+host: api200.azure-api.net
+basePath: /dilogic
+schemes:
+  - https
+securityDefinitions:
+  apiKeyHeader:
+    type: apiKey
+    name: Ocp-Apim-Subscription-Key
+    in: header
+  apiKeyQuery:
+    type: apiKey
+    name: subscription-key
+    in: query
+security:
+  - apiKeyHeader: []
+  - apiKeyQuery: []
+paths:
+  /documents:
+    get:
+      description: get-documents
+      operationId: get-documents
+      summary: get-documents
+      tags:
+        - documents
+      responses:
+        '200':
+          description: Successfully return
+          schema:
+            $ref: '#/definitions/DocumentsList'
+        '204':
+          description: documents collection empty
+      produces:
+        - application/json
+  '/lots/{lotId}/cars':
+    get:
+      description: get-cars-from-lot
+      operationId: get-cars-from-lot
+      summary: get-cars-from-lot
+      tags:
+        - cars
+      parameters:
+        - name: lotId
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successfully return
+          schema:
+            $ref: '#/definitions/CarsList'
+        '404':
+          description: lot not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '501':
+          description: lot or cars at lot does not ready for dispatch
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      produces:
+        - application/json
+    put:
+      description: put-cars-from-lot
+      operationId: put-cars-from-lot
+      summary: put-cars-from-lot
+      tags:
+        - cars
+      parameters:
+        - name: lotId
+          in: path
+          required: true
+          type: string
+        - name: lotCarsPatchObject
+          in: body
+          schema:
+            $ref: '#/definitions/LotCarsPatchObject'
+      consumes:
+        - application/json
+      responses:
+        '204':
+          description: Successfully update cars
+        '403':
+          description: area does not assign to current user
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '404':
+          description: Document not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '501':
+          description: Document does not ready to dispatch
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      produces:
+        - application/json
+  '/documents/{documentId}/cars':
+    get:
+      description: get-cars-from-document
+      operationId: get-cars-from-document
+      summary: get-cars-from-document
+      tags:
+        - cars
+      parameters:
+        - name: documentId
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successfully return
+          schema:
+            $ref: '#/definitions/CarsList'
+        '404':
+          description: document not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '501':
+          description: document or cars at document does not ready for dispatch
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      produces:
+        - application/json
+    put:
+      description: put-cars-from-document
+      operationId: put-cars-from-document
+      summary: put-cars-from-document
+      tags:
+        - cars
+      parameters:
+        - name: documentId
+          in: path
+          required: true
+          type: string
+        - name: documentCarsPatchObject
+          in: body
+          schema:
+            $ref: '#/definitions/DocumentCarsPatchObject'
+      consumes:
+        - application/json
+      responses:
+        '204':
+          description: Successfully update cars
+        '403':
+          description: area does not assign to current user
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '404':
+          description: Document not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '501':
+          description: Document does not ready to dispatch
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      produces:
+        - application/json
+  '/documents/{documentId}':
+    put:
+      description: put-document
+      operationId: put-document
+      summary: put-document
+      tags:
+        - documents
+      parameters:
+        - name: documentId
+          in: path
+          required: true
+          type: string
+        - name: documentPatchObject
+          in: body
+          schema:
+            $ref: '#/definitions/DocumentPatchObject'
+      consumes:
+        - application/json
+      responses:
+        '204':
+          description: Successfully update document
+        '403':
+          description: area does not assign to current user
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '404':
+          description: Document not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '501':
+          description: Document does not ready to dispatch
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      produces:
+        - application/json
+  /users/current:
+    get:
+      description: get-user-current
+      operationId: get-user-current
+      summary: get-user-current
+      tags:
+        - users
+      responses:
+        '200':
+          description: Successfully return user
+          schema:
+            $ref: '#/definitions/UserObject'
+        '403':
+          description: user does not have assigned area
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '404':
+          description: user not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      produces:
+        - application/json
+  '/documents/number/{documentNumber}':
+    get:
+      description: get-document-number
+      operationId: get-document-number
+      summary: get-document-number
+      tags:
+        - documents
+      parameters:
+        - name: documentNumber
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successfully return
+          schema:
+            $ref: '#/definitions/DocumentObject'
+        '404':
+          description: document not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '501':
+          description: lot or document at lot does not ready for dispatch
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      produces:
+        - application/json
+  '/cars/{VIN}':
+    get:
+      description: get-cars
+      operationId: get-cars
+      summary: get-cars
+      tags:
+        - cars
+      parameters:
+        - name: VIN
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successfully return
+          schema:
+            $ref: '#/definitions/CarObject'
+        '404':
+          description: car not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      produces:
+        - application/json
+    put:
+      description: put-cars
+      operationId: put-cars
+      summary: put-cars
+      tags:
+        - cars
+      parameters:
+        - name: VIN
+          in: path
+          required: true
+          type: string
+        - name: carPatchObject
+          in: body
+          schema:
+            $ref: '#/definitions/CarPatchObject'
+      consumes:
+        - application/json
+      responses:
+        '204':
+          description: Successfully update car
+        '403':
+          description: area does not assign to current user
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '404':
+          description: car not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '501':
+          description: Request does not ready
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      produces:
+        - application/json
+  '/lots/{lotId}/with-documents':
+    get:
+      description: get-lot-with-documents
+      operationId: get-lot-with-documents
+      summary: get-lot-with-documents
+      tags:
+        - lots
+      parameters:
+        - name: lotId
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successfully return lot and documents
+          schema:
+            $ref: '#/definitions/LotWithDocumentsObject'
+        '404':
+          description: Lot not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      produces:
+        - application/json
+definitions:
+  UserObject:
+    type: object
+    properties:
+      roles:
+        type: array
+        items:
+          type: string
+          enum:
+            - pre-scan
+            - atWork
+            - dispatch
+            - compoundIn
+      area:
+        type: object
+        required:
+          - id
+          - description
+          - passRequired
+          - manualInputPass
+        properties:
+          id:
+            type: string
+          description:
+            type: string
+          passRequired:
+            type: boolean
+          manualInputPass:
+            type: string
+    example:
+      roles:
+        - pre-scan
+        - atWork
+        - dispatch
+      area:
+        id: e8bd66b6-c6eb-4b93-818b-40fb1381401f
+        description: Всеволожск
+        passRequired: true
+        manualInputPass: '9102'
+  LotWithDocumentsObject:
+    type: object
+    required:
+      - areaId
+      - id
+    properties:
+      areaId:
+        type: string
+      id:
+        type: string
+      userName:
+        type: string
+      areaPassNumber:
+        type: string
+      documents:
+        $ref: '#/definitions/DocumentsList'
+    example:
+      areaId: e8bd66b6-c6eb-4b93-818b-40fb1381401f
+      id: 6d9dafd4-9ce3-47ce-85b8-dc35dac338de
+      userName: AKOROLE7
+      areaPassNumber: 6
+      documents:
+        - id: 8bcfc9e5-ca11-42d5-a3a9-f3e1d150c226
+          number: ES-123456
+          description: ES-123456
+          lotId: 6d9dafd4-9ce3-47ce-85b8-dc35dac338de
+          userName: SSIDOROV
+          status: pre-scan
+          manualInput: false
+        - id: 2235dfbb-dcac-4b57-a63d-2ce121603244
+          number: DK659874
+          description: DK-659874
+          lotId: 6d9dafd4-9ce3-47ce-85b8-dc35dac338de
+          userName: IIVANOV
+          status: pre-scan
+          manualInput: true
+  DocumentObject:
+    type: object
+    required:
+      - id
+      - number
+    properties:
+      id:
+        type: string
+      number:
+        type: string
+      description:
+        type: string
+      lotId:
+        type: string
+      userName:
+        type: string
+      status:
+        type: string
+        enum:
+          - pre-scan
+          - dispatch
+      manualInput:
+        type: boolean
+    example:
+      id: 8bcfc9e5-ca11-42d5-a3a9-f3e1d150c226
+      number: ES123456
+      description: ES-123456
+      lotId: null
+      userName: AALEXAN
+      status: ''
+      manualInput: false
+  DocumentsList:
+    type: array
+    items:
+      $ref: '#/definitions/DocumentObject'
+    example:
+      - id: 8bcfc9e5-ca11-42d5-a3a9-f3e1d150c226
+        number: ES-123456
+        description: ES-123456
+        lotId: 6d9dafd4-9ce3-47ce-85b8-dc35dac338de
+        userName: SSIDOROV
+        status: pre-scan
+        manualInput: false
+      - id: 2235dfbb-dcac-4b57-a63d-2ce121603244
+        number: DK659874
+        description: DK-659874
+        lotId: 6d9dafd4-9ce3-47ce-85b8-dc35dac338de
+        userName: IIVANOV
+        status: pre-scan
+        manualInput: true
+  DocumentPatchObject:
+    type: object
+    required:
+      - status
+    properties:
+      status:
+        type: string
+        enum:
+          - dispatch
+      manualInput:
+        type: boolean
+    example: "{\r\n  \"status\": \"dispatch\",\r\n  \"manualInput\": false\r\n}"
+  LotCarsPatchObject:
+    type: array
+    items:
+      type: object
+      required:
+        - VIN
+        - status
+        - documentId
+      properties:
+        scannedVIN:
+          type: string
+        documentId:
+          type: string
+        manualInput:
+          type: boolean
+        status:
+          type: string
+          enum:
+            - pre-scan
+      example:
+        - scannedVIN: Z6FXXXESGXHJ56977
+          documentId: 2235dfbb-dcac-4b57-a63d-2ce121603244
+          manualInput: false
+          status: pre-scan
+        - scannedVIN: Z6FBXXESWBFY34440
+          documentId: 6d9dafd4-9ce3-47ce-85b8-dc35dac338de
+          manualInput: false
+          status: pre-scan
+        - scannedVIN: Z6FLXXECHLGD22011
+          documentId: 6d9dafd4-9ce3-47ce-85b8-dc35dac338de
+          manualInput: true
+          status: pre-scan
+  DocumentCarsPatchObject:
+    type: array
+    items:
+      type: object
+      required:
+        - VIN
+        - status
+      properties:
+        scannedVIN:
+          type: string
+        manualInput:
+          type: boolean
+        status:
+          type: string
+          enum:
+            - pre-scan
+      example:
+        - scannedVIN: Z6FXXXESGXHJ56977
+          manualInput: false
+          status: pre-scan
+        - scannedVIN: Z6FBXXESWBFY34440
+          manualInput: false
+          status: pre-scan
+        - scannedVIN: Z6FLXXECHLGD22011
+          manualInput: true
+          status: pre-scan
+  CarObject:
+    type: object
+    required:
+      - VIN
+      - documentId
+    properties:
+      VIN:
+        type: string
+      model:
+        type: string
+      color:
+        type: string
+      documentId:
+        type: string
+      manualInput:
+        type: boolean
+      status:
+        type: string
+        enum:
+          - pre-scan
+          - compound out
+          - compound in
+    example:
+      VIN: Z6FXXXESGXHJ56977
+      model: Transit Van
+      color: Белый
+      documentId: a7473c33-0f1d-43f0-898b-cf826e77df8e
+      manualInput: false
+      status: null
+  CarPatchObject:
+    type: object
+    required:
+      - status
+    properties:
+      documentId:
+        type: string
+      manualInput:
+        type: boolean
+      status:
+        type: string
+        enum:
+          - compound in
+    example: "{\r\n  \"documentId\": \"a7473c33-0f1d-43f0-898b-cf826e77df8e\",\r\n  \"manualInput\": false,\r\n  \"status\": \"compound in\"\r\n}"
+  CarsList:
+    type: array
+    items:
+      $ref: '#/definitions/CarObject'
+    example:
+      - VIN: Z6FXXXESGXHJ56977
+        model: Transit Van
+        color: Белый
+        documentId: a7473c33-0f1d-43f0-898b-cf826e77df8e
+        manualInput: false
+        status: ''
+      - VIN: Z6FBXXESWBFY34440
+        model: Ecosport
+        color: Белый
+        documentId: 9da10d53-0827-4916-9a6d-ec260e21bb95
+        manualInput: false
+        status: ''
+      - VIN: Z6FLXXECHLGD22011
+        model: Ecosport
+        color: Белый
+        documentId: 9da10d53-0827-4916-9a6d-ec260e21bb95
+        manualInput: true
+        status: pre-scan
+  ErrorResponse:
+    type: object
+    required:
+      - error
+    properties:
+      error:
+        type: object
+        required:
+          - message
+        properties:
+          code:
+            type: string
+          message:
+            type: string
+    example:
+      error:
+        code: ''
+        message: Document ES-98562 not found
+tags: []
