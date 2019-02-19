@@ -62,6 +62,10 @@ export default {
             type: String,
             required: true,
         },
+        value: {
+            type: String,
+            default: '',
+        },
     },
     data: () => ({
         isManual: false,
@@ -75,6 +79,10 @@ export default {
     watch: {
         result(val) {
             this.$emit('input', this.result, this.isManual);
+        },
+        value(val) {
+            this.result = val;
+            this.isManual = false;
         },
     },
     methods: {

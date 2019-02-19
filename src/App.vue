@@ -1,7 +1,12 @@
 <template>
     <div id="app">
         <app-header />
+        <!-- <transition
+            name="fade"
+            mode="out-in"
+        > -->
         <router-view />
+        <!-- </transition> -->
         <b-modal
             v-model="isModalShown"
             header-border-variant="danger"

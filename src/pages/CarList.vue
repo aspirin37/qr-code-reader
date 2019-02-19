@@ -60,11 +60,10 @@ export default {
     data: () => ({
         loader: true,
         isVinListShown: true,
-        document: null,
         carList: null,
     }),
     computed: {
-        ...mapState(['scannedDocumentNumber', 'isScanScreenShown']),
+        ...mapState(['scannedDocument', 'isScanScreenShown']),
         isNextStepDisabled() {
             return (
                 this.carList &&
@@ -78,24 +77,16 @@ export default {
     },
     methods: {
         async getCarList() {
-            this.document = await this.$http.get(
-                `documents/number/${this.scannedDocumentNumber}`,
-            );
+            const url = this.scannedDocument.lotId
+                ? `lots/${this.scannedDocument.lotId}/cars`
+                : `documents/${this.scannedDocument.id}/cars`;
 
-            this.$nextTick(() => {
-                const url = this.document.lotId
-                    ? `lots/${this.document.lotId}/cars`
-                    : `documents/${this.document.id}/cars`;
-
-                this.$http
-                    .get(url)
-                    .then(res => {
-                        this.carList = res;
-                    })
-                    .finally(() => {
-                        this.loader = false;
-                    });
-            });
+            try {
+                this.carList = await this.$http.get(url);
+            } catch (err) {
+            } finally {
+                this.loader = false;
+            }
         },
     },
     beforeRouteLeave(to, from, next) {

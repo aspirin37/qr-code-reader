@@ -10,7 +10,7 @@ const store = new Vuex.Store({
         errorMessage: '',
         isErrorShown: false,
         isScanScreenShown: false,
-        scannedDocumentNumber: null,
+        scannedDocument: null,
     },
     mutations: {
         toggleMenu: state => {
@@ -31,8 +31,8 @@ const store = new Vuex.Store({
             state.errorMessage = '';
             state.isErrorShown = false;
         },
-        changeScannedDocumentNumber: (state, payload) => {
-            state.scannedDocumentNumber = payload;
+        changeScannedDocument: (state, payload) => {
+            state.scannedDocument = payload;
         },
         showScanScreen: state => {
             state.isScanScreenShown = true;
