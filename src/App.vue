@@ -1,12 +1,10 @@
 <template>
-    <div id="app">
+    <div
+        id="app"
+        :class="{'shown-menu': isMenuShown}"
+    >
         <app-header />
-        <!-- <transition
-            name="fade"
-            mode="out-in"
-        > -->
         <router-view />
-        <!-- </transition> -->
         <b-modal
             v-model="isModalShown"
             header-border-variant="danger"
@@ -47,3 +45,9 @@ export default {
     },
 };
 </script>
+<style lang="scss" scoped>
+.shown-menu {
+    height: calc(100vh - 56px);
+    overflow: hidden;
+}
+</style>
