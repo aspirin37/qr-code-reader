@@ -38,8 +38,8 @@ export default {
             'errorMessage',
             'isErrorShown',
         ]),
-        app100vh: () => ({
-            'app--100vh': isMenuShown || isScanScreenShown,
+        app100vh: vm => ({
+            'app--100vh': vm.isMenuShown || vm.isScanScreenShown,
         }),
     },
     methods: {
