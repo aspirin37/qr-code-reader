@@ -10,19 +10,16 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
     config => config,
     error => {
-        store.commit('showErrorMessage', error);
-        Promise.reject(response);
+        store.commit('showErrorMessage', error.message);
+        return Promise.reject(error);
     },
 );
 
 axiosInstance.interceptors.response.use(
-    response => {
-        if (response.statusCode === 404) return Promise.reject(response);
-        return response.data;
-    },
+    response => response.data,
     error => {
-        store.commit('showErrorMessage', error);
-        Promise.reject(response);
+        store.commit('showErrorMessage', error.message);
+        return Promise.reject(error);
     },
 );
 

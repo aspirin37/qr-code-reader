@@ -12,6 +12,7 @@ const store = new Vuex.Store({
         isScanScreenShown: false,
         scannedDocument: null,
     },
+
     mutations: {
         toggleMenu: state => {
             state.isMenuShown = !state.isMenuShown;
@@ -43,6 +44,7 @@ const store = new Vuex.Store({
             state.isErrorShown = false;
         },
     },
+
     getters: {
         userArea: state => {
             if (state.user) {

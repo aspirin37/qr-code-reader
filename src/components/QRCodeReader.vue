@@ -50,7 +50,7 @@ export default {
                         errorMessage = 'Ваш браузер не поддерживается приложением';
                         break;
                     default:
-                        errorMessage = 'Unknown';
+                        errorMessage = 'Неизвестаня ошибка';
                     }
                     this.$store.commit('showErrorMessage', errorMessage)
                 });

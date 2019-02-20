@@ -30,7 +30,7 @@
             />
         </transition>
         <b-modal
-            v-model="isModalShown"
+            v-model="isSuccessModalShown"
             class="text-center"
             header-border-variant="success"
             title="Готово!"
@@ -71,7 +71,7 @@ export default {
         isManual: false,
         loader: false,
         result: '',
-        isModalShown: false,
+        isSuccessModalShown: false,
     }),
     computed: {
         ...mapState(['isScanScreenShown']),
@@ -97,7 +97,7 @@ export default {
             if (result) {
                 this.result = result;
                 this.isManual = false;
-                this.isModalShown = true;
+                this.isSuccessModalShown = true;
             }
         },
         stopScanning() {
@@ -120,7 +120,4 @@ export default {
     background-size: 30px 30px;
     box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1) inset;
 }
-</style>
-
-<style scoped>
 </style>

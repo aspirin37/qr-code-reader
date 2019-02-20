@@ -14,7 +14,7 @@
             <nav
                 v-if="isMenuShown"
                 class="side-bar"
-                @click="hideMnu"
+                @click="hideMenu"
             >
                 <router-link
                     v-for="(it, i) in navigation"
@@ -34,11 +34,10 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
     name: 'AppHeader',
-    components: {},
     data: () => ({
         navigation: [
             {
@@ -52,16 +51,14 @@ export default {
         ],
     }),
     computed: {
+        ...mapState(['isMenuShown']),
         ...mapGetters(['userArea']),
-        isMenuShown() {
-            return this.$store.state.isMenuShown;
-        },
     },
     methods: {
         toggleMenu() {
             this.$store.commit('toggleMenu');
         },
-        hideMnu() {
+        hideMenu() {
             this.$store.commit('hideMenu');
         },
     },

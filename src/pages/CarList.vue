@@ -80,7 +80,6 @@ export default {
 
             try {
                 this.carList = await this.$http.get(url);
-            } catch (err) {
             } finally {
                 this.loader = false;
             }

@@ -42,9 +42,9 @@ export default {
                 this.document = await this.$http.get(
                     `documents/number/${this.documentNumber}`,
                 );
+
                 this.$router.push('/car-list');
                 this.$store.commit('changeScannedDocument', this.document);
-            } catch (err) {
             } finally {
                 setTimeout(() => {
                     this.documentNumber = '';
@@ -66,9 +66,3 @@ export default {
     },
 };
 </script>
-
-<style scoped>
-.form-control:disabled {
-    background-color: white !important;
-}
-</style>
