@@ -66,8 +66,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 header {
-    position: relative;
-    z-index: 100;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 200;
     width: 100%;
 }
 
@@ -92,12 +94,8 @@ header {
 }
 
 .side-bar {
-    position: absolute;
-    z-index: 1;
-    top: 60px;
     display: flex;
     flex-direction: column;
-    width: 100%;
     height: calc(100vh - 116px);
     background-color: #f8f9fa;
 

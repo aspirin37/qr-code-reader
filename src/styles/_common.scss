@@ -10,8 +10,9 @@ body {
     position: relative;
     display: flex;
     flex-direction: column;
-    min-height: calc(100vh - 116px);
+    min-height: calc(100vh - 56px);
     padding: 15px;
+    padding-top: 75px;
     padding-bottom: 90px;
 
     &__footer {

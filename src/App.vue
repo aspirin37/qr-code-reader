@@ -1,7 +1,8 @@
 <template>
     <div
         id="app"
-        :class="{'shown-menu': isMenuShown}"
+        class="app"
+        :class="{'app--menu-shown': isMenuShown}"
     >
         <app-header />
         <router-view />
@@ -46,8 +47,13 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.shown-menu {
-    height: calc(100vh - 56px);
-    overflow: hidden;
+.app {
+    max-height: 100%;
+    transition-delay: 0.3s;
+
+    &--menu-shown {
+        max-height: calc(100vh - 56px);
+        overflow: hidden;
+    }
 }
 </style>
