@@ -2,7 +2,7 @@
     <div
         id="app"
         class="app"
-        :class="{'app--menu-shown': isMenuShown}"
+        :class="app100vh"
     >
         <app-header />
         <router-view />
@@ -32,7 +32,15 @@ export default {
         isModalShown: false,
     }),
     computed: {
-        ...mapState(['isMenuShown', 'errorMessage', 'isErrorShown']),
+        ...mapState([
+            'isMenuShown',
+            'isScanScreenShown',
+            'errorMessage',
+            'isErrorShown',
+        ]),
+        app100vh: () => ({
+            'app--100vh': isMenuShown || isScanScreenShown,
+        }),
     },
     methods: {
         hideScanScreen() {
@@ -51,7 +59,7 @@ export default {
     max-height: 100%;
     transition-delay: 0.3s;
 
-    &--menu-shown {
+    &--100vh {
         max-height: calc(100vh - 56px);
         overflow: hidden;
     }
