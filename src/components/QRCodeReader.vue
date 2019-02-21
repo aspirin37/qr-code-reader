@@ -18,7 +18,7 @@ export default {
     },
     methods: {
         onDecode(result) {
-            this.$emit('decode', result);
+            if (result) this.$emit('decode', result);
         },
         async onInit(promise) {
             /* eslint-disable */
