@@ -25,22 +25,22 @@
         <transition name="fade">
             <qrcode-reader
                 v-if="isScanScreenShown"
-                @scanned="processResult"
+                @decode="onDecode"
                 @initialized="loader = false"
             />
         </transition>
-        <b-modal
+        <!-- <b-modal
             v-model="isSuccessModalShown"
             class="text-center"
             header-border-variant="success"
             title="Готово!"
             ok-only
             centered
-            @hidden="stopScanning"
+            @hidden="processResult"
         >
             <h4 class="font-weight-normal">{{ title }}</h4>
             <h5>{{ result }}</h5>
-        </b-modal>
+        </b-modal> -->
     </div>
 </template>
 
@@ -68,41 +68,35 @@ export default {
         },
     },
     data: () => ({
-        isManual: false,
         loader: false,
         result: '',
-        isSuccessModalShown: false,
+        // isSuccessModalShown: false,
     }),
     computed: {
         ...mapState(['isScanScreenShown']),
     },
     watch: {
-        result(val) {
-            this.$emit('input', this.result, this.isManual);
-        },
         value(val) {
             this.result = val;
-            this.isManual = false;
         },
     },
     methods: {
-        onInput() {
-            this.isManual = true;
-        },
         startScanning() {
             this.loader = true;
             this.$store.commit('showScanScreen');
         },
-        processResult(result) {
-            if (result) {
-                this.result = result;
-                this.isManual = false;
-                this.isSuccessModalShown = true;
-            }
+        onInput() {
+            this.$emit('input', this.result);
         },
-        stopScanning() {
-            this.$store.commit('hideScanScreen');
+        onDecode(result) {
+            this.result = result;
+            this.$emit('decode', this.result);
+            // this.isSuccessModalShown = true;
         },
+        // processResult() {
+        //     this.$store.commit('hideScanScreen');
+        //     this.$emit('decode', this.result);
+        // },
     },
 };
 </script>

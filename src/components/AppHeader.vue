@@ -8,7 +8,7 @@
             >
                 <span :class="['hamburger-menu', {'animate': isMenuShown}]" />
             </span>
-            <span>FordSollers <small>{{ userArea }}</small></span>
+            <span>{{ userArea }}</span>
         </div>
         <transition name="menu">
             <nav
@@ -77,7 +77,8 @@ header {
     position: relative;
     height: 60px;
     padding: 15px;
-    font-size: 20px;
+    font-size: 18px;
+    line-height: 30px;
     font-weight: 600;
     background-color: $ford-slate;
     color: white;

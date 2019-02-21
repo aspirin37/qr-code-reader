@@ -1,10 +1,11 @@
 <template>
     <div class="page">
         <scanner
-            title="Номер ТТН"
+            :title="title"
             buttonTitle="Сканировать ТТН"
             :value="documentNumber"
-            @input="processResult"
+            @input="onInput"
+            @decode="onDecode"
         />
         <footer class="page__footer">
             <button
@@ -15,6 +16,18 @@
                 Далее
             </button>
         </footer>
+        <b-modal
+            v-model="isSuccessModalShown"
+            class="text-center"
+            header-border-variant="success"
+            title="Готово!"
+            ok-only
+            centered
+            @hidden="hideScanScreen"
+        >
+            <h4 class="font-weight-normal">{{ title }}</h4>
+            <h5>{{ documentNumber }}</h5>
+        </b-modal>
     </div>
 </template>
 
@@ -28,10 +41,12 @@ export default {
         Scanner,
     },
     data: () => ({
+        title: 'Номер ТТН',
         documentNumber: '',
         document: null,
         loader: true,
         isManual: false,
+        isSuccessModalShown: false,
     }),
     computed: {
         ...mapState(['isScanScreenShown']),
@@ -51,9 +66,17 @@ export default {
                 }, 300);
             }
         },
-        processResult(result, isManual) {
+        onInput(result) {
             this.documentNumber = result;
-            this.isManual = isManual;
+            this.isManual = true;
+        },
+        onDecode(result) {
+            this.documentNumber = result;
+            this.isManual = false;
+            this.isSuccessModalShown = true;
+        },
+        hideScanScreen() {
+            this.$store.commit('hideScanScreen');
         },
     },
     beforeRouteLeave(to, from, next) {
