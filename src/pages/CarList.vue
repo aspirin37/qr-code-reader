@@ -4,7 +4,7 @@
         class="page"
     >
         <scanner
-            :title="title"
+            :title="scannerTitle"
             button-title="Сканировать VIN"
             :value="VIN"
             @input="onInput"
@@ -55,7 +55,10 @@
             centered
             @hidden="processResult"
         >
-            <h4 class="font-weight-normal">
+            <h4
+                v-if="modal.heading"
+                class="font-weight-normal"
+            >
                 {{ modal.heading }}
             </h4>
             <h5>{{ modal.message }}</h5>
@@ -73,7 +76,7 @@ export default {
         Scanner,
     },
     data: () => ({
-        title: 'VIN-номер',
+        scannerTitle: 'VIN-номер',
         loader: true,
         isVinListShown: true,
         carList: null,
@@ -114,14 +117,19 @@ export default {
             }
         },
         async checkCarList() {
-            const promises = this.carList.map(it => new Promise(async resolve => {
-                await this.$http.put(`/cars/${it.VIN}`, it);
-                resolve();
-            }));
+            const promises = this.carList.map(
+                it =>
+                    new Promise(async resolve => {
+                        await this.$http.put(`/cars/${it.VIN}`, it);
+                        resolve();
+                    }),
+            );
             await Promise.all(promises);
+
             this.modal.message = `Проверка VIN-номеров по документу ${
                 this.scannedDocument.description
             } успешно завершена`;
+
             this.modal.heading = '';
             this.modal.isShown = true;
         },

@@ -1,5 +1,4 @@
 <template>
-    <!-- :class="{'position-fixed': isMenuShown}" -->
     <header>
         <div class="navbar">
             <span

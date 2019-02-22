@@ -1,7 +1,7 @@
 <template>
     <div class="page">
         <scanner
-            :title="title"
+            :title="scannerTitle"
             button-title="Сканировать ТТН"
             :value="documentNumber"
             @input="onInput"
@@ -43,7 +43,7 @@ export default {
         Scanner,
     },
     data: () => ({
-        title: 'Номер ТТН',
+        scannerTitle: 'Номер ТТН',
         documentNumber: '',
         document: null,
         loader: true,
