@@ -26,21 +26,9 @@
             <qrcode-reader
                 v-if="isScanScreenShown"
                 @decode="onDecode"
-                @initialized="loader = false"
+                @initialized="onInitialized"
             />
         </transition>
-        <!-- <b-modal
-            v-model="isSuccessModalShown"
-            class="text-center"
-            header-border-variant="success"
-            title="Готово!"
-            ok-only
-            centered
-            @hidden="processResult"
-        >
-            <h4 class="font-weight-normal">{{ title }}</h4>
-            <h5>{{ result }}</h5>
-        </b-modal> -->
     </div>
 </template>
 
@@ -70,7 +58,6 @@ export default {
     data: () => ({
         loader: false,
         result: '',
-        // isSuccessModalShown: false,
     }),
     computed: {
         ...mapState(['isScanScreenShown']),
@@ -85,18 +72,16 @@ export default {
             this.loader = true;
             this.$store.commit('showScanScreen');
         },
+        onInitialized() {
+            this.loader = false;
+        },
         onInput() {
             this.$emit('input', this.result);
         },
         onDecode(result) {
             this.result = result;
             this.$emit('decode', this.result);
-            // this.isSuccessModalShown = true;
         },
-        // processResult() {
-        //     this.$store.commit('hideScanScreen');
-        //     this.$emit('decode', this.result);
-        // },
     },
 };
 </script>
