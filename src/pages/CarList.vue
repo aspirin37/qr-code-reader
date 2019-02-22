@@ -170,7 +170,7 @@ export default {
 
 <style lang="scss" scoped>
 .list-group-item {
-    transition: all 0.7s ease-out 0.15s;
+    transition: all 0.5s ease-out 0.15s;
 }
 
 .scanned {

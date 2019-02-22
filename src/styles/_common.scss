@@ -42,6 +42,7 @@ body {
 
 .btn {
     font-size: 1.1rem;
+    transition: all 0.5s ease-out 0.15s;
 }
 
 .form-control:disabled {
