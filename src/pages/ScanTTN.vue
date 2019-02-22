@@ -26,7 +26,7 @@
             @hidden="hideScanScreen"
         >
             <h4 class="font-weight-normal">
-                {{ title }}
+                {{ scannerTitle }}
             </h4>
             <h5>{{ documentNumber }}</h5>
         </b-modal>
