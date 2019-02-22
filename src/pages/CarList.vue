@@ -1,11 +1,11 @@
 <template>
     <div
-        class="page"
         v-if="!loader"
+        class="page"
     >
         <scanner
             :title="title"
-            buttonTitle="Сканировать VIN"
+            button-title="Сканировать VIN"
             :value="VIN"
             @input="onInput"
             @decode="onDecode"
@@ -55,7 +55,9 @@
             centered
             @hidden="processResult"
         >
-            <h4 class="font-weight-normal">{{ modal.heading }}</h4>
+            <h4 class="font-weight-normal">
+                {{ modal.heading }}
+            </h4>
             <h5>{{ modal.message }}</h5>
         </b-modal>
     </div>
@@ -112,12 +114,10 @@ export default {
             }
         },
         async checkCarList() {
-            const promises = this.carList.map(it => {
-                return new Promise(async resolve => {
-                    await this.$http.put(`/cars/${it.VIN}`, it);
-                    resolve();
-                });
-            });
+            const promises = this.carList.map(it => new Promise(async resolve => {
+                await this.$http.put(`/cars/${it.VIN}`, it);
+                resolve();
+            }));
             await Promise.all(promises);
             this.modal.message = `Проверка VIN-номеров по документу ${
                 this.scannedDocument.description

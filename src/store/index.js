@@ -7,6 +7,7 @@ const store = new Vuex.Store({
     state: {
         user: null,
         isMenuShown: false,
+        isMenuShownFirstTime: false,
         errorMessage: '',
         isErrorShown: false,
         isScanScreenShown: false,
@@ -16,9 +17,15 @@ const store = new Vuex.Store({
     mutations: {
         toggleMenu: state => {
             state.isMenuShown = !state.isMenuShown;
+            state.isMenuShownFirstTime = false;
         },
         hideMenu: state => {
             state.isMenuShown = false;
+            state.isMenuShownFirstTime = false;
+        },
+        initMenu: state => {
+            state.isMenuShown = true;
+            state.isMenuShownFirstTime = true;
         },
         logIn: (state, payload) => {
             localStorage.user = JSON.stringify(payload);

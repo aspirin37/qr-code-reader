@@ -2,7 +2,7 @@
     <div class="page">
         <scanner
             :title="title"
-            buttonTitle="Сканировать ТТН"
+            button-title="Сканировать ТТН"
             :value="documentNumber"
             @input="onInput"
             @decode="onDecode"
@@ -25,7 +25,9 @@
             centered
             @hidden="hideScanScreen"
         >
-            <h4 class="font-weight-normal">{{ title }}</h4>
+            <h4 class="font-weight-normal">
+                {{ title }}
+            </h4>
             <h5>{{ documentNumber }}</h5>
         </b-modal>
     </div>

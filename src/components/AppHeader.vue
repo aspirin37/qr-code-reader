@@ -3,6 +3,7 @@
     <header>
         <div class="navbar">
             <span
+                v-if="!isMenuShownFirstTime"
                 class="navbar__toggler"
                 @click="toggleMenu"
             >
@@ -14,7 +15,6 @@
             <nav
                 v-if="isMenuShown"
                 class="side-bar"
-                @click="hideMenu"
             >
                 <router-link
                     v-for="(it, i) in navigation"
@@ -22,6 +22,7 @@
                     :to="it.link"
                     class="side-bar__link border-bottom"
                     tag="div"
+                    @click.native="hideMenu"
                 >
                     {{ it.label }}
                 </router-link>
@@ -51,7 +52,7 @@ export default {
         ],
     }),
     computed: {
-        ...mapState(['isMenuShown']),
+        ...mapState(['isMenuShown', 'isMenuShownFirstTime']),
         ...mapGetters(['userArea']),
     },
     methods: {

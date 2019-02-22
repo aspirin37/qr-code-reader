@@ -42,14 +42,14 @@ export default {
             'app--100vh': vm.isMenuShown || vm.isScanScreenShown,
         }),
     },
-    methods: {
-        hideScanScreen() {
-            this.$store.commit('hideScanScreen');
-        },
-    },
     watch: {
         isErrorShown(val) {
             this.isModalShown = val;
+        },
+    },
+    methods: {
+        hideScanScreen() {
+            this.$store.commit('hideScanScreen');
         },
     },
 };
