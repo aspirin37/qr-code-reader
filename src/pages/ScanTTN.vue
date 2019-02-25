@@ -55,18 +55,17 @@ export default {
     },
     methods: {
         async goToCarList() {
-            try {
-                this.document = await this.$http.get(
-                    `documents/number/${this.documentNumber}`,
+            this.document = await this.$http
+                .get(`documents/number/${this.documentNumber}`)
+                .then(() => {
+                    this.$router.push('/car-list');
+                    this.$store.commit('changeScannedDocument', this.document);
+                })
+                .finally(
+                    setTimeout(() => {
+                        this.documentNumber = '';
+                    }, 300),
                 );
-
-                this.$router.push('/car-list');
-                this.$store.commit('changeScannedDocument', this.document);
-            } finally {
-                setTimeout(() => {
-                    this.documentNumber = '';
-                }, 300);
-            }
         },
         onInput(result) {
             this.documentNumber = result;

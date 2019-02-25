@@ -110,11 +110,9 @@ export default {
                 ? `lots/${this.scannedDocument.lotId}/cars`
                 : `documents/${this.scannedDocument.id}/cars`;
 
-            try {
-                this.carList = await this.$http.get(url);
-            } finally {
+            this.carList = await this.$http.get(url).finally(() => {
                 this.loader = false;
-            }
+            });
         },
         async checkCarList() {
             const promises = this.carList.map(
