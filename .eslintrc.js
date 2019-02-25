@@ -20,6 +20,7 @@ module.exports = {
         "import/extensions": "off",
         "import/no-extraneous-dependencies": "off",
         "import/no-unresolved": "off",
+        "implicit-arrow-linebreak": "off",
         "indent": ["error", 4, {"SwitchCase": 1}],
         "linebreak-style": 0,
         "max-len": ["error", {"code": 120}],

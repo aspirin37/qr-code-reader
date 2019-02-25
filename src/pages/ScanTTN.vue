@@ -1,24 +1,36 @@
 <template>
-    <form
-        class="page"
-        @submit.prevent="goToCarList"
-    >
+    <div class="page">
         <scanner
-            title="Номер TTN"
-            buttonTitle="Сканировать TTN"
+            :title="scannerTitle"
+            button-title="Сканировать ТТН"
             :value="documentNumber"
-            @input="processResult"
+            @input="onInput"
+            @decode="onDecode"
         />
         <footer class="page__footer">
             <button
                 class="w-100 btn btn-success mt-auto"
                 :disabled="!documentNumber"
-                type="submit"
+                @click="goToCarList"
             >
                 Далее
             </button>
         </footer>
-    </form>
+        <b-modal
+            v-model="isSuccessModalShown"
+            class="text-center"
+            header-border-variant="success"
+            title="Готово!"
+            ok-only
+            centered
+            @hidden="hideScanScreen"
+        >
+            <h4 class="font-weight-normal">
+                {{ scannerTitle }}
+            </h4>
+            <h5>{{ documentNumber }}</h5>
+        </b-modal>
+    </div>
 </template>
 
 <script>
@@ -31,10 +43,12 @@ export default {
         Scanner,
     },
     data: () => ({
+        scannerTitle: 'Номер ТТН',
         documentNumber: '',
         document: null,
         loader: true,
         isManual: false,
+        isSuccessModalShown: false,
     }),
     computed: {
         ...mapState(['isScanScreenShown']),
@@ -45,18 +59,26 @@ export default {
                 this.document = await this.$http.get(
                     `documents/number/${this.documentNumber}`,
                 );
+
                 this.$router.push('/car-list');
                 this.$store.commit('changeScannedDocument', this.document);
-            } catch (err) {
             } finally {
                 setTimeout(() => {
                     this.documentNumber = '';
                 }, 300);
             }
         },
-        processResult(result, isManual) {
+        onInput(result) {
             this.documentNumber = result;
-            this.isManual = isManual;
+            this.isManual = true;
+        },
+        onDecode(result) {
+            this.documentNumber = result;
+            this.isManual = false;
+            this.isSuccessModalShown = true;
+        },
+        hideScanScreen() {
+            this.$store.commit('hideScanScreen');
         },
     },
     beforeRouteLeave(to, from, next) {
@@ -69,9 +91,3 @@ export default {
     },
 };
 </script>
-
-<style scoped>
-.form-control:disabled {
-    background-color: white !important;
-}
-</style>

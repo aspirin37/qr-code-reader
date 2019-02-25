@@ -1,12 +1,11 @@
 <template>
-    <div id="app">
+    <div
+        id="app"
+        class="app"
+        :class="app100vh"
+    >
         <app-header />
-        <!-- <transition
-            name="fade"
-            mode="out-in"
-        > -->
         <router-view />
-        <!-- </transition> -->
         <b-modal
             v-model="isModalShown"
             header-border-variant="danger"
@@ -33,17 +32,36 @@ export default {
         isModalShown: false,
     }),
     computed: {
-        ...mapState(['isMenuShown', 'errorMessage', 'isErrorShown']),
-    },
-    methods: {
-        hideScanScreen() {
-            this.$store.commit('hideScanScreen');
-        },
+        ...mapState([
+            'isMenuShown',
+            'isScanScreenShown',
+            'errorMessage',
+            'isErrorShown',
+        ]),
+        app100vh: vm => ({
+            'app--100vh': vm.isMenuShown || vm.isScanScreenShown,
+        }),
     },
     watch: {
         isErrorShown(val) {
             this.isModalShown = val;
         },
     },
+    methods: {
+        hideScanScreen() {
+            this.$store.commit('hideScanScreen');
+        },
+    },
 };
 </script>
+<style lang="scss" scoped>
+.app {
+    max-height: 100%;
+    transition-delay: 0.3s;
+
+    &--100vh {
+        max-height: calc(100vh - 56px);
+        overflow: hidden;
+    }
+}
+</style>

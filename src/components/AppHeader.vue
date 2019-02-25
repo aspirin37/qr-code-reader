@@ -2,18 +2,18 @@
     <header>
         <div class="navbar">
             <span
+                v-if="!isMenuShownFirstTime"
                 class="navbar__toggler"
                 @click="toggleMenu"
             >
                 <span :class="['hamburger-menu', {'animate': isMenuShown}]" />
             </span>
-            <span>FordSollers <small>{{ userArea }}</small></span>
+            <span>{{ userArea }}</span>
         </div>
         <transition name="menu">
             <nav
                 v-if="isMenuShown"
                 class="side-bar"
-                @click="hideMnu"
             >
                 <router-link
                     v-for="(it, i) in navigation"
@@ -21,6 +21,7 @@
                     :to="it.link"
                     class="side-bar__link border-bottom"
                     tag="div"
+                    @click.native="hideMenu"
                 >
                     {{ it.label }}
                 </router-link>
@@ -33,11 +34,10 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
     name: 'AppHeader',
-    components: {},
     data: () => ({
         navigation: [
             {
@@ -51,16 +51,14 @@ export default {
         ],
     }),
     computed: {
+        ...mapState(['isMenuShown', 'isMenuShownFirstTime']),
         ...mapGetters(['userArea']),
-        isMenuShown() {
-            return this.$store.state.isMenuShown;
-        },
     },
     methods: {
         toggleMenu() {
             this.$store.commit('toggleMenu');
         },
-        hideMnu() {
+        hideMenu() {
             this.$store.commit('hideMenu');
         },
     },
@@ -69,8 +67,9 @@ export default {
 <style lang="scss" scoped>
 header {
     position: fixed;
-    z-index: 100;
     top: 0;
+    left: 0;
+    z-index: 200;
     width: 100%;
 }
 
@@ -78,7 +77,8 @@ header {
     position: relative;
     height: 60px;
     padding: 15px;
-    font-size: 20px;
+    font-size: 18px;
+    line-height: 30px;
     font-weight: 600;
     background-color: $ford-slate;
     color: white;
@@ -95,13 +95,9 @@ header {
 }
 
 .side-bar {
-    position: absolute;
-    z-index: 1;
-    top: 60px;
     display: flex;
     flex-direction: column;
-    width: 100%;
-    height: calc(100vh - 60px);
+    height: calc(100vh - 116px);
     background-color: #f8f9fa;
 
     &__link {

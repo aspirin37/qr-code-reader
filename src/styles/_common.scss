@@ -3,13 +3,14 @@ body {
     font-size: 16px;
     color: #343a40;
     padding: 0;
+    margin: 0;
 }
 
 .page {
     position: relative;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: calc(100vh - 56px);
     padding: 15px;
     padding-top: 75px;
     padding-bottom: 90px;
@@ -41,11 +42,7 @@ body {
 
 .btn {
     font-size: 1.1rem;
-}
-
-.btn-slate {
-    background-color: $ford-slate-screen;
-    color: white;
+    transition: all 0.5s ease-out 0.15s;
 }
 
 .form-control:disabled {
@@ -54,4 +51,21 @@ body {
 
 .list-group-item {
     padding: 0.375rem 0.75rem;
+}
+
+.modal {
+    bottom: 56px !important;
+}
+
+.modal-backdrop {
+    bottom: 56px !important;
+}
+
+.modal-dialog {
+    margin: 0 !important;
+    padding: 0.5rem !important;
+}
+
+.modal-dialog-centered {
+    height: calc(100vh - 56px) !important;
 }

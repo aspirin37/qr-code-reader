@@ -25,22 +25,10 @@
         <transition name="fade">
             <qrcode-reader
                 v-if="isScanScreenShown"
-                @scanned="processResult"
-                @initialized="loader = false"
+                @decode="onDecode"
+                @initialized="onInitialized"
             />
         </transition>
-        <b-modal
-            v-model="isModalShown"
-            class="text-center"
-            header-border-variant="success"
-            title="Готово!"
-            ok-only
-            centered
-            @hidden="stopScanning"
-        >
-            <h4 class="font-weight-normal">{{ title }}</h4>
-            <h5>{{ result }}</h5>
-        </b-modal>
     </div>
 </template>
 
@@ -68,40 +56,31 @@ export default {
         },
     },
     data: () => ({
-        isManual: false,
         loader: false,
         result: '',
-        isModalShown: false,
     }),
     computed: {
         ...mapState(['isScanScreenShown']),
     },
     watch: {
-        result(val) {
-            this.$emit('input', this.result, this.isManual);
-        },
         value(val) {
             this.result = val;
-            this.isManual = false;
         },
     },
     methods: {
-        onInput() {
-            this.isManual = true;
-        },
         startScanning() {
             this.loader = true;
             this.$store.commit('showScanScreen');
         },
-        processResult(result) {
-            if (result) {
-                this.result = result;
-                this.isManual = false;
-                this.isModalShown = true;
-            }
+        onInitialized() {
+            this.loader = false;
         },
-        stopScanning() {
-            this.$store.commit('hideScanScreen');
+        onInput() {
+            this.$emit('input', this.result);
+        },
+        onDecode(result) {
+            this.result = result;
+            this.$emit('decode', this.result);
         },
     },
 };
@@ -120,7 +99,4 @@ export default {
     background-size: 30px 30px;
     box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1) inset;
 }
-</style>
-
-<style scoped>
 </style>

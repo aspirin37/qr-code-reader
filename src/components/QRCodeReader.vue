@@ -18,7 +18,7 @@ export default {
     },
     methods: {
         onDecode(result) {
-            this.$emit('scanned', result);
+            if (result) this.$emit('decode', result);
         },
         async onInit(promise) {
             /* eslint-disable */
@@ -50,7 +50,7 @@ export default {
                         errorMessage = 'Ваш браузер не поддерживается приложением';
                         break;
                     default:
-                        errorMessage = 'Unknown';
+                        errorMessage = 'Неизвестаня ошибка';
                     }
                     this.$store.commit('showErrorMessage', errorMessage)
                 });
@@ -61,14 +61,14 @@ export default {
 
 <style scoped>
 .qr-reader {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
     width: 100%;
-    height: 100vh;
+    height: calc(100vh - 56px);
     background: black;
     z-index: 200;
 }

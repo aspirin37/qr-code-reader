@@ -10,6 +10,7 @@
     "build": "node build/build.js",
     "stat": "npm run build --report",
     "deploy": "node build/deployWABS.js",
+    "setup-lint": "npm i --g eslint babel-eslint eslint-plugin-import eslint-config-airbnb-base eslint-plugin-vue",
     "lint": "eslint --fix --ext .js,.vue src",
     "test": "jest --config test/jest.conf.js"
   },
