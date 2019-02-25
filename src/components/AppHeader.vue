@@ -20,7 +20,6 @@
                     :key="i"
                     :to="it.link"
                     class="side-bar__link border-bottom"
-                    tag="div"
                     @click.native="hideMenu"
                 >
                     {{ it.label }}
@@ -105,6 +104,8 @@ header {
         padding: 15px;
         border-bottom: 1px solid #dee2e6;
         font-size: 22px;
+        color: inherit;
+        text-decoration: none;
 
         &--logout {
             margin-top: auto;
