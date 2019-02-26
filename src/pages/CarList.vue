@@ -10,6 +10,13 @@
             @input="onInput"
             @decode="onDecode"
         />
+        <button
+            class="w-100 btn btn-success mb-3"
+            :disabled="!isCarListChecked"
+            @click="checkCarList"
+        >
+            Подтвердить проверку
+        </button>
         <ul class="list-group">
             <li
                 v-for="car in carList"
@@ -37,15 +44,6 @@
                 </transition>
             </li>
         </ul>
-        <footer class="page__footer">
-            <button
-                class="w-100 btn btn-success mt-auto"
-                :disabled="!isCarListChecked"
-                @click="checkCarList"
-            >
-                Подтвердить проверку
-            </button>
-        </footer>
         <b-modal
             v-model="modal.isShown"
             class="text-center"
@@ -90,10 +88,9 @@ export default {
     computed: {
         ...mapState(['scannedDocument', 'isScanScreenShown']),
         isCarListChecked() {
-            return !(
+            return (
                 this.carList &&
-                this.carList.length &&
-                this.carList.some(it => it.status !== 'scanned')
+                !this.carList.some(it => it.status !== 'scanned')
             );
         },
     },
@@ -168,6 +165,7 @@ export default {
 
 <style lang="scss" scoped>
 .list-group-item {
+    font-size: 18px;
     transition: all 0.5s ease-out 0.15s;
 }
 

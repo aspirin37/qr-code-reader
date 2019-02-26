@@ -19,7 +19,14 @@
                 type="button"
                 @click="startScanning"
             >
-                {{ buttonTitle }}
+                <span class="mr-2">
+                    {{ buttonTitle }}
+                </span>
+                <img
+                    width="22"
+                    height="22"
+                    :src="require('../assets/icon-qr.svg')"
+                >
             </button>
         </template>
         <transition name="fade">
@@ -91,12 +98,7 @@ export default {
     margin-bottom: 1rem;
     background-color: transparent;
     font-size: 19px;
-    text-align: left;
     background-color: lighten($ford-slate-screen, 30%);
-    background-image: url('../assets/qr-code.svg');
-    background-repeat: no-repeat;
-    background-position: right 25px center;
-    background-size: 30px 30px;
     box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1) inset;
 }
 </style>

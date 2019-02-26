@@ -7,15 +7,13 @@
             @input="onInput"
             @decode="onDecode"
         />
-        <footer class="page__footer">
-            <button
-                class="w-100 btn btn-success mt-auto"
-                :disabled="!documentNumber"
-                @click="goToCarList"
-            >
-                Далее
-            </button>
-        </footer>
+        <button
+            class="w-100 btn btn-success"
+            :disabled="!documentNumber"
+            @click="goToCarList"
+        >
+            Далее
+        </button>
         <b-modal
             v-model="isSuccessModalShown"
             class="text-center"
@@ -55,17 +53,11 @@ export default {
     },
     methods: {
         async goToCarList() {
-            this.document = await this.$http
-                .get(`documents/number/${this.documentNumber}`)
-                .then(() => {
-                    this.$router.push('/car-list');
-                    this.$store.commit('changeScannedDocument', this.document);
-                })
-                .finally(
-                    setTimeout(() => {
-                        this.documentNumber = '';
-                    }, 300),
-                );
+            this.document = await this.$http.get(
+                `documents/number/${this.documentNumber}`,
+            );
+            this.$router.push('/car-list');
+            this.$store.commit('changeScannedDocument', this.document);
         },
         onInput(result) {
             this.documentNumber = result;
