@@ -62,6 +62,9 @@
                 {{ modal.heading }}
             </h4>
             <h5>{{ modal.message }}</h5>
+            <p v-if="!isCarCheckComplete">
+                Отсканировано {{ carsChecked }} из {{ carList.length }}
+            </p>
         </b-modal>
     </div>
 </template>
@@ -79,7 +82,7 @@ export default {
         scannerTitle: 'VIN-номер',
         loader: true,
         isVinListShown: true,
-        carList: null,
+        carList: [],
         VIN: '',
         isCarCheckComplete: false,
         modal: {
@@ -93,9 +96,12 @@ export default {
         ...mapState(['scannedDocument', 'isScanScreenShown']),
         isCarListChecked() {
             return (
-                this.carList &&
-                !this.carList.some(it => it.status !== 'scanned')
+                this.carList.length &&
+                this.carList.every(it => it.status === 'scanned')
             );
+        },
+        carsChecked() {
+            return this.carList.filter(it => it.status === 'scanned').length;
         },
     },
     created() {
@@ -130,23 +136,24 @@ export default {
             } успешно завершена`;
 
             this.modal.heading = '';
-            this.modal.isShown = true;
             this.isCarCheckComplete = true;
+            this.modal.isShown = true;
         },
         onInput(result) {
             this.VIN = result;
         },
         onDecode(result) {
             this.VIN = result;
+
+            if (!this.isCarListChecked) {
+                const scannedCar = this.carList.find(it => it.VIN === result);
+                scannedCar.status = 'scanned';
+            }
+
             this.modal.message = result;
             this.modal.isShown = true;
         },
         processResult() {
-            if (!this.isCarListChecked) {
-                const scannedCar = this.carList.find(it => it.VIN === this.VIN);
-                scannedCar.status = 'scanned';
-            }
-
             if (this.isCarListChecked) {
                 this.$store.commit('hideScanScreen');
                 this.modal.okTitle = 'Ок';
