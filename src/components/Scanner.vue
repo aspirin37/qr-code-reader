@@ -23,8 +23,7 @@
                     {{ buttonTitle }}
                 </span>
                 <img
-                    width="22"
-                    height="22"
+                    class="btn-scan_icon"
                     :src="require('../assets/icon-qr.svg')"
                 >
             </button>
@@ -100,5 +99,12 @@ export default {
     font-size: 19px;
     background-color: lighten($ford-slate-screen, 30%);
     box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1) inset;
+
+    &_icon {
+        width: 22px;
+        height: 22px;
+        position: relative;
+        top: -1px;
+    }
 }
 </style>

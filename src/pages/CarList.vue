@@ -49,6 +49,8 @@
             class="text-center"
             header-border-variant="success"
             title="Готово!"
+            :ok-title="modal.okTitle"
+            ok-variant="success"
             ok-only
             centered
             @hidden="processResult"
@@ -79,9 +81,11 @@ export default {
         isVinListShown: true,
         carList: null,
         VIN: '',
+        isCarCheckComplete: false,
         modal: {
             heading: 'VIN-номер',
             message: '',
+            okTitle: 'Далее',
             isShown: false,
         },
     }),
@@ -127,6 +131,7 @@ export default {
 
             this.modal.heading = '';
             this.modal.isShown = true;
+            this.isCarCheckComplete = true;
         },
         onInput(result) {
             this.VIN = result;
@@ -137,18 +142,20 @@ export default {
             this.modal.isShown = true;
         },
         processResult() {
-            this.$store.commit('hideScanScreen');
-
-            if (this.isCarListChecked) {
-                this.$router.push('/scan-TTN');
-                return;
+            if (!this.isCarListChecked) {
+                const scannedCar = this.carList.find(it => it.VIN === this.VIN);
+                scannedCar.status = 'scanned';
             }
 
-            this.carList.forEach(it => {
-                if (it.VIN === this.VIN) {
-                    it.status = 'scanned';
-                }
-            });
+            if (this.isCarListChecked) {
+                this.$store.commit('hideScanScreen');
+                this.modal.okTitle = 'Ок';
+            }
+
+            if (this.isCarCheckComplete) {
+                this.$router.push('/scan-TTN');
+            }
+
             this.VIN = '';
         },
     },

@@ -19,6 +19,7 @@
             class="text-center"
             header-border-variant="success"
             title="Готово!"
+            ok-variant="success"
             ok-only
             centered
             @hidden="hideScanScreen"
