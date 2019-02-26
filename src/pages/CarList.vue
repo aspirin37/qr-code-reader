@@ -22,6 +22,7 @@
                 v-for="car in carList"
                 :key="car.VIN"
                 class="list-group-item"
+                :class="{'scanned': car.status === 'scanned'}"
                 @click="isVinListShown = !isVinListShown"
             >
                 <transition
@@ -188,7 +189,7 @@ export default {
 }
 
 .scanned {
-    $scanned: #e1ffe8;
+    $scanned: #f0fff4;
     background-color: $scanned;
     border-color: darken($scanned, 20%);
 }
