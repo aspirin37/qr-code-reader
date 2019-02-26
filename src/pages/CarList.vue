@@ -21,8 +21,7 @@
             <li
                 v-for="car in carList"
                 :key="car.VIN"
-                class="list-group-item d-flex"
-                :class="{'scanned': car.status === 'scanned'}"
+                class="list-group-item"
                 @click="isVinListShown = !isVinListShown"
             >
                 <transition
@@ -42,6 +41,12 @@
                         {{ car.model }} <small>{{ car.color }}</small>
                     </div>
                 </transition>
+                <b
+                    v-if="car.status === 'scanned'"
+                    class="ml-auto mr-3 text-success"
+                >
+                    &#10003;
+                </b>
             </li>
         </ul>
         <b-modal
@@ -145,10 +150,8 @@ export default {
         onDecode(result) {
             this.VIN = result;
 
-            if (!this.isCarListChecked) {
-                const scannedCar = this.carList.find(it => it.VIN === result);
-                scannedCar.status = 'scanned';
-            }
+            const scannedCar = this.carList.find(it => it.VIN === result);
+            scannedCar.status = 'scanned';
 
             this.modal.message = result;
             this.modal.isShown = true;
@@ -179,6 +182,7 @@ export default {
 
 <style lang="scss" scoped>
 .list-group-item {
+    display: flex;
     font-size: 18px;
     transition: all 0.5s ease-out 0.15s;
 }
