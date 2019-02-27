@@ -68,7 +68,7 @@
                 {{ modal.heading }}
             </h4>
             <h5>{{ modal.message }}</h5>
-            <p v-if="!isCarCheckComplete">
+            <p v-if="!isCarCheckSubmitted">
                 Отсканировано {{ carsChecked }} из {{ carList.length }}
             </p>
         </b-modal>
@@ -90,7 +90,7 @@ export default {
         isVinListShown: true,
         carList: [],
         VIN: '',
-        isCarCheckComplete: false,
+        isCarCheckSubmitted: false,
         modal: {
             heading: 'VIN-номер',
             message: '',
@@ -128,13 +128,11 @@ export default {
             });
         },
         async checkCarList() {
-            const promises = this.carList.map(
-                it =>
-                    new Promise(async resolve => {
-                        await this.$http.put(`/cars/${it.VIN}`, it);
-                        resolve();
-                    }),
-            );
+            // prettier-ignore
+            const promises = this.carList.map(it => new Promise(async resolve => {
+                await this.$http.put(`/cars/${it.VIN}`, it);
+                resolve();
+            }));
             await Promise.all(promises);
 
             this.modal.message = `Проверка VIN-номеров по документу ${
@@ -142,7 +140,7 @@ export default {
             } успешно завершена`;
 
             this.modal.heading = '';
-            this.isCarCheckComplete = true;
+            this.isCarCheckSubmitted = true;
             this.modal.isShown = true;
         },
         onInput(result) {
@@ -163,7 +161,7 @@ export default {
                 this.modal.okTitle = 'Ок';
             }
 
-            if (this.isCarCheckComplete) {
+            if (this.isCarCheckSubmitted) {
                 this.$router.push('/scan-TTN');
             }
 
