@@ -60,8 +60,7 @@ export default {
     transition-delay: 0.3s;
 
     &--100vh {
-        // max-height: calc(100vh - 56px);
-        max-height: 100vh;
+        max-height: calc(100vh - 56px);
         overflow: hidden;
     }
 }
