@@ -150,7 +150,9 @@ export default {
             this.VIN = result;
 
             const scannedCar = this.carList.find(it => it.VIN === result);
-            scannedCar.status = 'scanned';
+            if (scannedCar) {
+                scannedCar.status = 'scanned';
+            }
 
             this.modal.message = result;
             this.modal.isShown = true;
