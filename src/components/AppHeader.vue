@@ -96,8 +96,7 @@ header {
 .side-bar {
     display: flex;
     flex-direction: column;
-    // height: calc(100vh - 116px);
-    height: calc(100vh - 60px);
+    height: calc(100vh - 116px);
     background-color: #f8f9fa;
 
     &__link {
