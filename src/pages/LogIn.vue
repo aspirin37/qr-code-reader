@@ -9,17 +9,19 @@ export default {
         user: null,
     }),
     mounted() {
-        if (!localStorage.user) {
-            this.logIn();
-        } else {
-            this.$router.push('/scan-TTN');
-        }
+        this.logIn();
     },
     methods: {
         async logIn() {
-            this.user = await this.$http.get('users/current');
-            this.$store.commit('logIn', this.user);
-
+            if (!localStorage.user) {
+                this.user = await this.$http.get('users/current');
+                this.$store.commit('logIn', this.user);
+                this.initApp();
+            } else {
+                this.initApp();
+            }
+        },
+        initApp() {
             if (this.user.roles.length > 1) {
                 this.$store.commit('initMenu', this.user);
                 return;
