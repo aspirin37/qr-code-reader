@@ -28,7 +28,6 @@ const store = new Vuex.Store({
             state.isMenuShownFirstTime = true;
         },
         logIn: (state, payload) => {
-            localStorage.user = JSON.stringify(payload);
             state.user = payload;
         },
         showErrorMessage: (state, payload) => {
@@ -56,9 +55,6 @@ const store = new Vuex.Store({
         userArea: state => {
             if (state.user) {
                 return state.user.area.description;
-            }
-            if (localStorage.user) {
-                return JSON.parse(localStorage.user).area.description;
             }
             return '';
         },

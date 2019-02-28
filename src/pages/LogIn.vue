@@ -3,26 +3,29 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
     name: 'LogIn',
-    data: () => ({
-        user: null,
-    }),
+    computed: {
+        ...mapState(['user']),
+    },
     mounted() {
         this.logIn();
     },
     methods: {
         async logIn() {
             if (!localStorage.user) {
-                this.user = await this.$http.get('users/current');
-                this.$store.commit('logIn', this.user);
+                const user = await this.$http.get('users/current');
+                this.$store.commit('logIn', user);
                 this.initApp();
             } else {
+                this.$store.commit('logIn', JSON.parse(localStorage.user));
                 this.initApp();
             }
         },
         initApp() {
-            if (this.user.roles.length > 1) {
+            if (this.user && this.user.roles.length > 1) {
                 this.$store.commit('initMenu', this.user);
                 return;
             }
