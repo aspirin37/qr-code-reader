@@ -17,6 +17,7 @@ export default {
         async logIn() {
             if (!localStorage.user) {
                 const user = await this.$http.get('users/current');
+                localStorage.user = JSON.stringify(user);
                 this.$store.commit('logIn', user);
                 this.initApp();
             } else {
