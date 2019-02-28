@@ -94,7 +94,6 @@
 <script>
 export default {
     name: 'Warning',
-    methods: {},
 };
 </script>
 
