@@ -92,7 +92,7 @@ export default {
         VIN: '',
         isCarCheckSubmitted: false,
         modal: {
-            heading: 'VIN-номер',
+            heading: '',
             message: '',
             okTitle: 'Далее',
             isShown: false,
@@ -150,12 +150,18 @@ export default {
             this.VIN = result;
 
             const scannedCar = this.carList.find(it => it.VIN === result);
-            if (scannedCar) {
-                scannedCar.status = 'scanned';
-            }
 
-            this.modal.message = result;
-            this.modal.isShown = true;
+            if (scannedCar) {
+                if (scannedCar.status !== 'scanned') {
+                    scannedCar.status = 'scanned';
+                    this.modal.heading = 'VIN-номер';
+                    this.modal.message = result;
+                } else {
+                    this.modal.heading = '';
+                    this.modal.message = `VIN-номер ${result} уже отсканирован!`;
+                }
+                this.modal.isShown = true;
+            }
         },
         processResult() {
             if (this.isCarListChecked) {
