@@ -139,63 +139,6 @@ paths:
             $ref: '#/definitions/ErrorResponse'
       produces:
         - application/json
-  '/cars/{VIN}':
-    get:
-      description: get-cars
-      operationId: get-cars
-      summary: get-cars
-      tags:
-        - cars
-      parameters:
-        - name: VIN
-          in: path
-          required: true
-          type: string
-      responses:
-        '200':
-          description: Successfully return
-          schema:
-            $ref: '#/definitions/CarObject'
-        '404':
-          description: car not found
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-      produces:
-        - application/json
-    put:
-      description: put-cars
-      operationId: put-cars
-      summary: put-cars
-      tags:
-        - cars
-      parameters:
-        - name: VIN
-          in: path
-          required: true
-          type: string
-        - name: carObject
-          in: body
-          schema:
-            $ref: '#/definitions/CarObject'
-      consumes:
-        - application/json
-      responses:
-        '204':
-          description: Successfully update car
-        '403':
-          description: area does not assign to current user
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '404':
-          description: car not found
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-        '501':
-          description: Request does not ready
-          schema:
-            $ref: '#/definitions/ErrorResponse'
-      produces:
-        - application/json
   '/lots/{lotId}/documents':
     get:
       description: get-documents-from-lot
@@ -244,6 +187,130 @@ paths:
             $ref: '#/definitions/ErrorResponse'
       produces:
         - application/json
+    put:
+      operationId: put-lot
+      summary: put-lot
+      tags:
+        - lots
+      parameters:
+        - name: lotId
+          in: path
+          required: true
+          type: string
+        - name: lotObject
+          in: body
+          schema:
+            $ref: '#/definitions/LotObject'
+      consumes:
+        - application/json
+      responses:
+        '204':
+          description: Successfully update lot
+        '403':
+          description: area does not assign to current user
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '404':
+          description: lot not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '501':
+          description: Request does not ready
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      produces:
+        - application/json
+  '/documents/{documentId}':
+    put:
+      operationId: put-document
+      summary: put-document
+      tags:
+        - documents
+      parameters:
+        - name: documentId
+          in: path
+          required: true
+          type: string
+        - name: documentObject
+          in: body
+          schema:
+            $ref: '#/definitions/DocumentObject'
+      consumes:
+        - application/json
+      responses:
+        '204':
+          description: Successfully update document
+        '403':
+          description: area does not assign to current user
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '404':
+          description: document not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '501':
+          description: Request does not ready
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      produces:
+        - application/json
+  '/cars/{VIN}':
+    get:
+      description: get-car
+      operationId: get-car
+      summary: get-car
+      tags:
+        - cars
+      parameters:
+        - name: VIN
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successfully return
+          schema:
+            $ref: '#/definitions/CarObject'
+        '404':
+          description: car not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      produces:
+        - application/json
+    put:
+      description: put-car
+      operationId: put-car
+      summary: put-car
+      tags:
+        - cars
+      parameters:
+        - name: VIN
+          in: path
+          required: true
+          type: string
+        - name: carObject
+          in: body
+          schema:
+            $ref: '#/definitions/CarObject'
+      consumes:
+        - application/json
+      responses:
+        '204':
+          description: Successfully update car
+        '403':
+          description: area does not assign to current user
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '404':
+          description: car not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '501':
+          description: Request does not ready
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      produces:
+        - application/json
 definitions:
   UserObject:
     type: object
@@ -286,8 +353,8 @@ definitions:
   LotObject:
     type: object
     required:
-      - areaId
       - id
+      - status
     properties:
       areaId:
         type: string
@@ -297,16 +364,22 @@ definitions:
         type: string
       areaPassNumber:
         type: string
-    example:
-      areaId: e8bd66b6-c6eb-4b93-818b-40fb1381401f
-      id: 6d9dafd4-9ce3-47ce-85b8-dc35dac338de
-      userName: AKOROLE7
-      areaPassNumber: 6
+      status:
+        type: string
+        enum:
+          - pre-scan
+          - compound out
+      scans:
+        type: array
+        items:
+          type: string
+    example: "{\r\n  \"areaId\": \"e8bd66b6-c6eb-4b93-818b-40fb1381401f\",\r\n  \"id\": \"6d9dafd4-9ce3-47ce-85b8-dc35dac338de\",\r\n  \"userName\": \"AKOROLE7\",\r\n  \"areaPassNumber\": 6,\r\n  \"status\": \"pre-scan\"\r\n}"
   DocumentObject:
     type: object
     required:
       - id
       - number
+      - status
     properties:
       id:
         type: string
@@ -318,12 +391,16 @@ definitions:
         type: string
       userName:
         type: string
-    example:
-      id: 8bcfc9e5-ca11-42d5-a3a9-f3e1d150c226
-      number: ES123456
-      description: ES-123456
-      lotId: null
-      userName: AALEXAN
+      status:
+        type: string
+        enum:
+          - pre-scan
+          - compound out
+      scans:
+        type: array
+        items:
+          type: string
+    example: "{\r\n  \"id\": \"8bcfc9e5-ca11-42d5-a3a9-f3e1d150c226\",\r\n  \"number\": \"ES123456\",\r\n  \"description\": \"ES-123456\",\r\n  \"lotId\": null,\r\n  \"userName\": \"AALEXAN\",\r\n  \"status\": \"pre-scan\"\r\n}"
   DocumentsList:
     type: array
     items:
@@ -357,6 +434,8 @@ definitions:
     type: object
     required:
       - documentId
+      - VIN
+      - status
     properties:
       VIN:
         type: string
