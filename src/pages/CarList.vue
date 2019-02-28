@@ -160,8 +160,12 @@ export default {
                     this.modal.heading = '';
                     this.modal.message = `VIN-номер ${result} уже отсканирован!`;
                 }
-                this.modal.isShown = true;
+            } else {
+                this.modal.heading = '';
+                this.modal.message = `Нет совпадений по номеру ${result}`;
             }
+
+            this.modal.isShown = true;
         },
         processResult() {
             if (this.isCarListChecked) {

@@ -24,7 +24,10 @@
                 >
                     {{ it.label }}
                 </router-link>
-                <div class="side-bar__link side-bar__link--logout">
+                <div
+                    class="side-bar__link side-bar__link--logout"
+                    @click="logOut"
+                >
                     Выход
                 </div>
             </nav>
@@ -59,6 +62,9 @@ export default {
         },
         hideMenu() {
             this.$store.commit('hideMenu');
+        },
+        logOut() {
+            localStorage.removeItem('user');
         },
     },
 };
