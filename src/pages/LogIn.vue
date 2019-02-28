@@ -9,7 +9,11 @@ export default {
         user: null,
     }),
     mounted() {
-        this.logIn();
+        if (!localStorage.user) {
+            this.logIn();
+        } else {
+            this.$router.push('/scan-TTN');
+        }
     },
     methods: {
         async logIn() {

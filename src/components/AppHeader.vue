@@ -1,5 +1,5 @@
 <template>
-    <header>
+    <header v-if="userArea">
         <div class="navbar">
             <span
                 v-if="!isMenuShownFirstTime"
