@@ -188,6 +188,7 @@ paths:
       produces:
         - application/json
     put:
+      description: put-lot
       operationId: put-lot
       summary: put-lot
       tags:
@@ -222,6 +223,7 @@ paths:
         - application/json
   '/documents/{documentId}':
     put:
+      description: put-document
       operationId: put-document
       summary: put-document
       tags:
@@ -372,8 +374,13 @@ definitions:
       scans:
         type: array
         items:
-          type: string
-    example: "{\r\n  \"areaId\": \"e8bd66b6-c6eb-4b93-818b-40fb1381401f\",\r\n  \"id\": \"6d9dafd4-9ce3-47ce-85b8-dc35dac338de\",\r\n  \"userName\": \"AKOROLE7\",\r\n  \"areaPassNumber\": 6,\r\n  \"status\": \"pre-scan\"\r\n}"
+          type: object
+          properties:
+            value:
+              type: string
+            manualInput:
+              type: boolean
+    example: "{\r\n  \"areaId\": \"e8bd66b6-c6eb-4b93-818b-40fb1381401f\",\r\n  \"id\": \"6d9dafd4-9ce3-47ce-85b8-dc35dac338de\",\r\n  \"userName\": \"AKOROLE7\",\r\n  \"areaPassNumber\": 6,\r\n  \"status\": \"pre-scan\",\r\n  \"scans\": [\r\n    {\r\n      \"value\": \"Z6FLXXECH\",\r\n      \"manualInput\": false\r\n    },\r\n    {\r\n      \"value\": \"AALEXAN\",\r\n      \"manualInput\": true\r\n    }\r\n  ]\r\n}"
   DocumentObject:
     type: object
     required:
@@ -399,8 +406,13 @@ definitions:
       scans:
         type: array
         items:
-          type: string
-    example: "{\r\n  \"id\": \"8bcfc9e5-ca11-42d5-a3a9-f3e1d150c226\",\r\n  \"number\": \"ES123456\",\r\n  \"description\": \"ES-123456\",\r\n  \"lotId\": null,\r\n  \"userName\": \"AALEXAN\",\r\n  \"status\": \"pre-scan\"\r\n}"
+          type: object
+          properties:
+            value:
+              type: string
+            manualInput:
+              type: boolean
+    example: "{\r\n  \"id\": \"8bcfc9e5-ca11-42d5-a3a9-f3e1d150c226\",\r\n  \"number\": \"ES123456\",\r\n  \"description\": \"ES-123456\",\r\n  \"lotId\": null,\r\n  \"userName\": \"AALEXAN\",\r\n  \"status\": \"compound out\",\r\n  \"scans\": [\r\n    {\r\n      \"value\": \"ES123456\",\r\n      \"manualInput\": false\r\n    },\r\n    {\r\n      \"value\": \"123456-ES\",\r\n      \"manualInput\": true\r\n    }\r\n  ]\r\n}"
   DocumentsList:
     type: array
     items:
