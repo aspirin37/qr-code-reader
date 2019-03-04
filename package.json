@@ -10,7 +10,7 @@
     "build": "node build/build.js",
     "stat": "npm run build --report",
     "deploy": "node build/deployWABS.js",
-    "setup-lint": "npm i --g eslint babel-eslint eslint-plugin-import eslint-config-airbnb-base eslint-plugin-vue",
+    "setup-lint": "npm i --g eslint babel-eslint eslint-plugin-import eslint-config-airbnb-base eslint-plugin-vue eslint-plugin-jest",
     "lint": "eslint --fix --ext .js,.vue src",
     "test": "jest --config test/jest.conf.js"
   },
@@ -45,6 +45,7 @@
     "friendly-errors-webpack-plugin": "^1.6.1",
     "html-webpack-plugin": "^2.30.1",
     "jest": "^24.1.0",
+    "jest-canvas-mock": "^2.0.0-alpha.3",
     "node-notifier": "^5.1.2",
     "node-sass": "^4.11.0",
     "optimize-css-assets-webpack-plugin": "^3.2.0",

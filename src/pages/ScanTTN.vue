@@ -8,6 +8,7 @@
             @decode="onDecode"
         />
         <button
+            ref="button-next"
             class="w-100 btn btn-success"
             :disabled="!documentNumber"
             @click="goToCarList"

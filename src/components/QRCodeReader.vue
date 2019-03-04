@@ -16,16 +16,23 @@ export default {
     components: {
         QrcodeStream,
     },
+    data: () => ({
+        loader: true,
+    }),
     methods: {
         onDecode(result) {
-            if (result) this.$emit('decode', result);
+            if (result) {
+                setTimeout(() => {
+                    this.$emit('decode', result);
+                }, 500);
+            }
         },
         async onInit(promise) {
             /* eslint-disable */
             // prettier-ignore
             promise
                 .then(() => {
-                    this.$emit('initialized');
+                    this.loader = false;
                 })
                 .catch(error => {
                     let errorMessage;
