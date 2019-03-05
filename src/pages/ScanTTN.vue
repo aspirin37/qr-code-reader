@@ -58,6 +58,7 @@ export default {
             this.document = await this.$http.get(
                 `documents/number/${this.documentNumber}`,
             );
+
             this.$router.push('/car-list');
             this.$store.commit('changeScannedDocument', this.document);
         },
