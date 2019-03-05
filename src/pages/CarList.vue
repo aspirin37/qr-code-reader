@@ -10,11 +10,18 @@
             @input="onInput"
             @decode="onDecode"
         />
+        <button
+            class="w-100 btn btn-success mb-3"
+            :disabled="!isCarListChecked"
+            @click="checkCarList"
+        >
+            Подтвердить проверку
+        </button>
         <ul class="list-group">
             <li
                 v-for="car in carList"
                 :key="car.VIN"
-                class="list-group-item d-flex"
+                class="list-group-item"
                 :class="{'scanned': car.status === 'scanned'}"
                 @click="isVinListShown = !isVinListShown"
             >
@@ -35,22 +42,21 @@
                         {{ car.model }} <small>{{ car.color }}</small>
                     </div>
                 </transition>
+                <b
+                    v-if="car.status === 'scanned'"
+                    class="ml-auto mr-3 text-success"
+                >
+                    &#10003;
+                </b>
             </li>
         </ul>
-        <footer class="page__footer">
-            <button
-                class="w-100 btn btn-success mt-auto"
-                :disabled="!isCarListChecked"
-                @click="checkCarList"
-            >
-                Подтвердить проверку
-            </button>
-        </footer>
         <b-modal
             v-model="modal.isShown"
             class="text-center"
             header-border-variant="success"
             title="Готово!"
+            :ok-title="modal.okTitle"
+            ok-variant="success"
             ok-only
             centered
             @hidden="processResult"
@@ -62,6 +68,9 @@
                 {{ modal.heading }}
             </h4>
             <h5>{{ modal.message }}</h5>
+            <p v-if="!isCarCheckSubmitted">
+                Отсканировано {{ carsChecked }} из {{ carList.length }}
+            </p>
         </b-modal>
     </div>
 </template>
@@ -79,22 +88,26 @@ export default {
         scannerTitle: 'VIN-номер',
         loader: true,
         isVinListShown: true,
-        carList: null,
+        carList: [],
         VIN: '',
+        isCarCheckSubmitted: false,
         modal: {
-            heading: 'VIN-номер',
+            heading: '',
             message: '',
+            okTitle: 'Далее',
             isShown: false,
         },
     }),
     computed: {
         ...mapState(['scannedDocument', 'isScanScreenShown']),
         isCarListChecked() {
-            return !(
-                this.carList &&
+            return (
                 this.carList.length &&
-                this.carList.some(it => it.status !== 'scanned')
+                this.carList.every(it => it.status === 'scanned')
             );
+        },
+        carsChecked() {
+            return this.carList.filter(it => it.status === 'scanned').length;
         },
     },
     created() {
@@ -110,20 +123,16 @@ export default {
                 ? `lots/${this.scannedDocument.lotId}/cars`
                 : `documents/${this.scannedDocument.id}/cars`;
 
-            try {
-                this.carList = await this.$http.get(url);
-            } finally {
+            this.carList = await this.$http.get(url).finally(() => {
                 this.loader = false;
-            }
+            });
         },
         async checkCarList() {
-            const promises = this.carList.map(
-                it =>
-                    new Promise(async resolve => {
-                        await this.$http.put(`/cars/${it.VIN}`, it);
-                        resolve();
-                    }),
-            );
+            // prettier-ignore
+            const promises = this.carList.map(it => new Promise(async resolve => {
+                await this.$http.put(`/cars/${it.VIN}`, it);
+                resolve();
+            }));
             await Promise.all(promises);
 
             this.modal.message = `Проверка VIN-номеров по документу ${
@@ -131,6 +140,7 @@ export default {
             } успешно завершена`;
 
             this.modal.heading = '';
+            this.isCarCheckSubmitted = true;
             this.modal.isShown = true;
         },
         onInput(result) {
@@ -138,22 +148,35 @@ export default {
         },
         onDecode(result) {
             this.VIN = result;
-            this.modal.message = result;
+
+            const scannedCar = this.carList.find(it => it.VIN === result);
+
+            if (scannedCar) {
+                if (scannedCar.status !== 'scanned') {
+                    scannedCar.status = 'scanned';
+                    this.modal.heading = 'VIN-номер';
+                    this.modal.message = result;
+                } else {
+                    this.modal.heading = '';
+                    this.modal.message = `VIN-номер ${result} уже отсканирован!`;
+                }
+            } else {
+                this.modal.heading = '';
+                this.modal.message = `Нет совпадений по номеру ${result}`;
+            }
+
             this.modal.isShown = true;
         },
         processResult() {
-            this.$store.commit('hideScanScreen');
-
             if (this.isCarListChecked) {
-                this.$router.push('/scan-TTN');
-                return;
+                this.$store.commit('hideScanScreen');
+                this.modal.okTitle = 'Ок';
             }
 
-            this.carList.forEach(it => {
-                if (it.VIN === this.VIN) {
-                    it.status = 'scanned';
-                }
-            });
+            if (this.isCarCheckSubmitted) {
+                this.$router.push('/scan-TTN');
+            }
+
             this.VIN = '';
         },
     },
@@ -170,11 +193,13 @@ export default {
 
 <style lang="scss" scoped>
 .list-group-item {
+    display: flex;
+    font-size: 18px;
     transition: all 0.5s ease-out 0.15s;
 }
 
 .scanned {
-    $scanned: #e1ffe8;
+    $scanned: #f0fff4;
     background-color: $scanned;
     border-color: darken($scanned, 20%);
 }

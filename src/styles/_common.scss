@@ -10,10 +10,8 @@ body {
     position: relative;
     display: flex;
     flex-direction: column;
-    min-height: calc(100vh - 56px);
     padding: 15px;
     padding-top: 75px;
-    padding-bottom: 90px;
 
     &__footer {
         position: absolute;
@@ -41,8 +39,14 @@ body {
 }
 
 .btn {
+    padding-top: 0.3rem;
+    padding-bottom: 0.45rem;
     font-size: 1.1rem;
     transition: all 0.5s ease-out 0.15s;
+
+    &-success {
+        box-shadow: inset 0 -0.6em 6px -0.35em rgba(0, 0, 0, 0.17);
+    }
 }
 
 .form-control:disabled {
@@ -54,11 +58,11 @@ body {
 }
 
 .modal {
-    bottom: 56px !important;
+    max-height: calc(100vh - 56px);
 }
 
 .modal-backdrop {
-    bottom: 56px !important;
+    max-height: calc(100vh - 56px);
 }
 
 .modal-dialog {
@@ -67,5 +71,9 @@ body {
 }
 
 .modal-dialog-centered {
-    height: calc(100vh - 56px) !important;
+    min-height: calc(100% - (0.5rem * 2) - 56px);
+
+    &::before {
+        height: calc(100vh - (0.5rem * 2) - 56px);
+    }
 }

@@ -47,6 +47,9 @@ export default {
             this.isModalShown = val;
         },
     },
+    created() {
+        this.$router.push('/warning');
+    },
     methods: {
         hideScanScreen() {
             this.$store.commit('hideScanScreen');

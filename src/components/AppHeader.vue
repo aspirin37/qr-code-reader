@@ -1,5 +1,5 @@
 <template>
-    <header>
+    <header v-if="userArea">
         <div class="navbar">
             <span
                 v-if="!isMenuShownFirstTime"
@@ -20,12 +20,14 @@
                     :key="i"
                     :to="it.link"
                     class="side-bar__link border-bottom"
-                    tag="div"
                     @click.native="hideMenu"
                 >
                     {{ it.label }}
                 </router-link>
-                <div class="side-bar__link side-bar__link--logout">
+                <div
+                    class="side-bar__link side-bar__link--logout"
+                    @click="logOut"
+                >
                     Выход
                 </div>
             </nav>
@@ -60,6 +62,9 @@ export default {
         },
         hideMenu() {
             this.$store.commit('hideMenu');
+        },
+        logOut() {
+            localStorage.removeItem('user');
         },
     },
 };
@@ -105,6 +110,8 @@ header {
         padding: 15px;
         border-bottom: 1px solid #dee2e6;
         font-size: 22px;
+        color: inherit;
+        text-decoration: none;
 
         &--logout {
             margin-top: auto;
