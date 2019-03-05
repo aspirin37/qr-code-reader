@@ -1,5 +1,5 @@
 <template>
-    <header v-if="userArea">
+    <header v-if="user">
         <div class="navbar">
             <span
                 v-if="!isMenuShownFirstTime"
@@ -8,7 +8,7 @@
             >
                 <span :class="['hamburger-menu', {'animate': isMenuShown}]" />
             </span>
-            <span>{{ userArea }}</span>
+            <span>{{ user.area.description }}</span>
         </div>
         <transition name="menu">
             <nav
@@ -17,6 +17,7 @@
             >
                 <router-link
                     v-for="(it, i) in navigation"
+                    v-show="userHasAccess(it)"
                     :key="i"
                     :to="it.link"
                     class="side-bar__link border-bottom"
@@ -36,7 +37,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapState } from 'vuex';
 
 export default {
     name: 'AppHeader',
@@ -45,16 +46,22 @@ export default {
             {
                 label: 'Проверка VIN из ТТН/Акт',
                 link: '/scan-TTN',
+                role: 'pre-scan',
+            },
+            {
+                label: 'Подтверждение отгрузки',
+                link: '/shipment-confirmation',
+                role: 'dispatch',
             },
             {
                 label: 'Документы в работе',
                 link: '/',
+                role: 'common',
             },
         ],
     }),
     computed: {
-        ...mapState(['isMenuShown', 'isMenuShownFirstTime']),
-        ...mapGetters(['userArea']),
+        ...mapState(['isMenuShown', 'isMenuShownFirstTime', 'user']),
     },
     methods: {
         toggleMenu() {
@@ -65,6 +72,12 @@ export default {
         },
         logOut() {
             localStorage.removeItem('user');
+        },
+        userHasAccess(link) {
+            return (
+                this.user.roles.some(userRole => userRole === link.role) ||
+                link.role === 'common'
+            );
         },
     },
 };

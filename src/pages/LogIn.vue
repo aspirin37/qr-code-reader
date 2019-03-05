@@ -26,12 +26,21 @@ export default {
             }
         },
         initApp() {
-            if (this.user && this.user.roles.length > 1) {
+            if (this.user.roles.length > 1) {
                 this.$store.commit('initMenu', this.user);
                 return;
             }
 
-            this.$router.push('/scan-TTN');
+            const userRole = this.user.roles[0];
+            switch (userRole) {
+                case 'pre-scan':
+                    this.$router.push('/scan-TTN');
+                    break;
+                case 'dispatch':
+                    this.$router.push('/shipment-confirmation');
+                    break;
+                default:
+            }
         },
     },
 };
