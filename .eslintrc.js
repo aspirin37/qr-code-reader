@@ -23,7 +23,7 @@ module.exports = {
         "implicit-arrow-linebreak": "off",
         "indent": ["error", 4, {"SwitchCase": 1}],
         "linebreak-style": 0,
-        "max-len": ["error", {"code": 120}],
+        "max-len": ["error", {"code": 140}],
         "no-param-reassign": "off",
         "no-plusplus": "off",
         "vue/component-name-in-template-casing": ["error", "kebab-case"],

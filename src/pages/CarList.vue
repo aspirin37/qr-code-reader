@@ -22,7 +22,7 @@
                 v-for="car in carList"
                 :key="car.VIN"
                 class="list-group-item"
-                :class="{'scanned': car.status === 'scanned'}"
+                :class="{'scanned': car.status === 'pre-scan'}"
                 @click="isVinListShown = !isVinListShown"
             >
                 <transition
@@ -43,7 +43,7 @@
                     </div>
                 </transition>
                 <b
-                    v-if="car.status === 'scanned'"
+                    v-if="car.status === 'pre-scan'"
                     class="ml-auto mr-3 text-success"
                 >
                     &#10003;
@@ -103,11 +103,11 @@ export default {
         isCarListChecked() {
             return (
                 this.carList.length &&
-                this.carList.every(it => it.status === 'scanned')
+                this.carList.every(it => it.status === 'pre-scan')
             );
         },
         carsChecked() {
-            return this.carList.filter(it => it.status === 'scanned').length;
+            return this.carList.filter(it => it.status === 'pre-scan').length;
         },
     },
     created() {
@@ -152,8 +152,8 @@ export default {
             const scannedCar = this.carList.find(it => it.VIN === result);
 
             if (scannedCar) {
-                if (scannedCar.status !== 'scanned') {
-                    scannedCar.status = 'scanned';
+                if (scannedCar.status !== 'pre-scan') {
+                    scannedCar.status = 'pre-scan';
                     this.modal.heading = 'VIN-номер';
                     this.modal.message = result;
                 } else {
@@ -190,17 +190,3 @@ export default {
     },
 };
 </script>
-
-<style lang="scss" scoped>
-.list-group-item {
-    display: flex;
-    font-size: 18px;
-    transition: all 0.5s ease-out 0.15s;
-}
-
-.scanned {
-    $scanned: #f0fff4;
-    background-color: $scanned;
-    border-color: darken($scanned, 20%);
-}
-</style>

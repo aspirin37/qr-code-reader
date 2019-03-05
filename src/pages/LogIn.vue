@@ -40,6 +40,7 @@ export default {
                     this.$router.push('/shipment-confirmation');
                     break;
                 default:
+                    throw new Error('User role not found');
             }
         },
     },

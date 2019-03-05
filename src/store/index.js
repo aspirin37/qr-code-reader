@@ -50,15 +50,6 @@ const store = new Vuex.Store({
             state.isErrorShown = false;
         },
     },
-
-    getters: {
-        userArea: state => {
-            if (state.user) {
-                return state.user.area.description;
-            }
-            return '';
-        },
-    },
 });
 
 export default store;

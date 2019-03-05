@@ -56,7 +56,7 @@ export default {
             {
                 label: 'Документы в работе',
                 link: '/',
-                role: 'common',
+                role: 'atWork',
             },
         ],
     }),
@@ -74,10 +74,7 @@ export default {
             localStorage.removeItem('user');
         },
         userHasAccess(link) {
-            return (
-                this.user.roles.some(userRole => userRole === link.role) ||
-                link.role === 'common'
-            );
+            return this.user.roles.some(userRole => userRole === link.role);
         },
     },
 };
