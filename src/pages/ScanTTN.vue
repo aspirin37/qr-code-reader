@@ -8,6 +8,7 @@
             @decode="onDecode"
         />
         <button
+            ref="button-next"
             class="w-100 btn btn-success"
             :disabled="!documentNumber"
             @click="goToCarList"
@@ -57,6 +58,7 @@ export default {
             this.document = await this.$http.get(
                 `documents/number/${this.documentNumber}`,
             );
+
             this.$router.push('/car-list');
             this.$store.commit('changeScannedDocument', this.document);
         },
