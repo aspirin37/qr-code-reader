@@ -2,7 +2,9 @@ swagger: '2.0'
 info:
   title: Dilogic dispatch
   version: '1.0'
-  description: Dilogic dispatch API
+  description: |-
+    Dilogic dispatch API
+    Try at https://api200.portal.azure-api.net/ 
 host: api200.azure-api.net
 basePath: /dilogic
 schemes:
@@ -319,6 +321,10 @@ definitions:
     properties:
       roles:
         type: array
+        example:
+          - pre-scan
+          - atWork
+          - dispatch
         items:
           type: string
           enum:
@@ -336,22 +342,16 @@ definitions:
         properties:
           id:
             type: string
+            example: e8bd66b6-c6eb-4b93-818b-40fb1381401f
           description:
             type: string
+            example: Всеволожск
           passRequired:
             type: boolean
+            example: true
           manualInputPass:
             type: string
-    example:
-      roles:
-        - pre-scan
-        - atWork
-        - dispatch
-      area:
-        id: e8bd66b6-c6eb-4b93-818b-40fb1381401f
-        description: Всеволожск
-        passRequired: true
-        manualInputPass: '9102'
+            example: 9102
   LotObject:
     type: object
     required:
@@ -360,14 +360,19 @@ definitions:
     properties:
       areaId:
         type: string
+        example: e8bd66b6-c6eb-4b93-818b-40fb1381401f
       id:
         type: string
+        example: 6d9dafd4-9ce3-47ce-85b8-dc35dac338de
       userName:
         type: string
+        example: AKOROLE7
       areaPassNumber:
         type: string
+        example: 6
       status:
         type: string
+        example: pre-scan
         enum:
           - pre-scan
           - compound out
@@ -378,9 +383,10 @@ definitions:
           properties:
             value:
               type: string
+              example: Z6FLXXECH
             manualInput:
               type: boolean
-    example: "{\r\n  \"areaId\": \"e8bd66b6-c6eb-4b93-818b-40fb1381401f\",\r\n  \"id\": \"6d9dafd4-9ce3-47ce-85b8-dc35dac338de\",\r\n  \"userName\": \"AKOROLE7\",\r\n  \"areaPassNumber\": 6,\r\n  \"status\": \"pre-scan\",\r\n  \"scans\": [\r\n    {\r\n      \"value\": \"Z6FLXXECH\",\r\n      \"manualInput\": false\r\n    },\r\n    {\r\n      \"value\": \"AALEXAN\",\r\n      \"manualInput\": true\r\n    }\r\n  ]\r\n}"
+              example: true
   DocumentObject:
     type: object
     required:
@@ -390,16 +396,22 @@ definitions:
     properties:
       id:
         type: string
+        example: 8bcfc9e5-ca11-42d5-a3a9-f3e1d150c226
       number:
         type: string
+        example: ES123456
       description:
         type: string
+        example: ES-123456
       lotId:
         type: string
+        example: null
       userName:
         type: string
+        example: AALEXAN
       status:
         type: string
+        example: compound out
         enum:
           - pre-scan
           - compound out
@@ -410,9 +422,10 @@ definitions:
           properties:
             value:
               type: string
+              example: ES123456
             manualInput:
               type: boolean
-    example: "{\r\n  \"id\": \"8bcfc9e5-ca11-42d5-a3a9-f3e1d150c226\",\r\n  \"number\": \"ES123456\",\r\n  \"description\": \"ES-123456\",\r\n  \"lotId\": null,\r\n  \"userName\": \"AALEXAN\",\r\n  \"status\": \"compound out\",\r\n  \"scans\": [\r\n    {\r\n      \"value\": \"ES123456\",\r\n      \"manualInput\": false\r\n    },\r\n    {\r\n      \"value\": \"123456-ES\",\r\n      \"manualInput\": true\r\n    }\r\n  ]\r\n}"
+              example: false
   DocumentsList:
     type: array
     items:
@@ -423,25 +436,19 @@ definitions:
       properties:
         id:
           type: string
+          example: 8bcfc9e5-ca11-42d5-a3a9-f3e1d150c226
         number:
           type: string
+          example: ES-123456
         description:
           type: string
+          example: ES-123456
         lotId:
           type: string
+          example: 6d9dafd4-9ce3-47ce-85b8-dc35dac338de
         userName:
           type: string
-    example:
-      - id: 8bcfc9e5-ca11-42d5-a3a9-f3e1d150c226
-        number: ES-123456
-        description: ES-123456
-        lotId: 6d9dafd4-9ce3-47ce-85b8-dc35dac338de
-        userName: SSIDOROV
-      - id: 2235dfbb-dcac-4b57-a63d-2ce121603244
-        number: DK659874
-        description: DK-659874
-        lotId: 6d9dafd4-9ce3-47ce-85b8-dc35dac338de
-        userName: IIVANOV
+          example: SSIDOROV
   CarObject:
     type: object
     required:
@@ -451,23 +458,29 @@ definitions:
     properties:
       VIN:
         type: string
+        example: Z6FXXXESGXHJ56977
       documentId:
         type: string
+        example: a7473c33-0f1d-43f0-898b-cf826e77df8e
       lotId:
         type: string
+        example: b8273c22-0f1d-43f0-898b-cf826e77df81
       manualInput:
         type: boolean
+        example: false
       status:
         type: string
         enum:
           - pre-scan
           - compound out
           - compound in
+        example: compound out
       model:
         type: string
+        example: Transit Van
       color:
         type: string
-    example: "{\r\n  \"VIN\": \"Z6FXXXESGXHJ56977\",\r\n  \"documentId\": \"a7473c33-0f1d-43f0-898b-cf826e77df8e\",\r\n  \"lotId\": \"b8273c22-0f1d-43f0-898b-cf826e77df81\",\r\n  \"manualInput\": false,\r\n  \"status\": \"compound in\",\r\n  \"model\": \"Transit Van\",\r\n  \"color\": \"Белый\"\r\n}"
+        example: Белый
   CarsList:
     type: array
     items:
@@ -478,44 +491,29 @@ definitions:
       properties:
         VIN:
           type: string
+          example: Z6FBXXESWBFY34440
         documentId:
           type: string
+          example: a7473c33-0f1d-43f0-898b-cf826e77df8e
         lotId:
           type: string
+          example: d7473c33-0f1d-43f0-898b-cf826e77df85
         manualInput:
           type: boolean
+          example: false
         status:
           type: string
+          example: compound in
           enum:
             - pre-scan
             - compound out
             - compound in
         model:
           type: string
+          example: Ecosport
         color:
           type: string
-    example:
-      - VIN: Z6FXXXESGXHJ56977
-        documentId: a7473c33-0f1d-43f0-898b-cf826e77df8e
-        lotId: d7473c33-0f1d-43f0-898b-cf826e77df85
-        manualInput: false
-        status: ''
-        model: Transit Van
-        color: Белый
-      - VIN: Z6FBXXESWBFY34440
-        documentId: 9da10d53-0827-4916-9a6d-ec260e21bb95
-        lotId: 8da10d53-0827-4916-9a6d-ec260e21bb94
-        manualInput: false
-        status: ''
-        model: Ecosport
-        color: Белый
-      - VIN: Z6FLXXECHLGD22011
-        documentId: 9da10d53-0827-4916-9a6d-ec260e21bb95
-        lotId: 3da10d53-0827-4916-9a6d-ec260e21bb98
-        manualInput: true
-        status: pre-scan
-        model: Ecosport
-        color: Белый
+          example: Белый
   ErrorResponse:
     type: object
     required:
