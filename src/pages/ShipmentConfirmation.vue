@@ -7,13 +7,22 @@
             @input="onInput"
             @decode="onDecode"
         />
-        <button
-            class="w-100 btn btn-success mb-3"
-            :disabled="!isDocumentListChecked"
-            @click="checkDocumentList"
-        >
-            Подтвердить отгрузку
-        </button>
+        <div class="d-flex justify-content-between">
+            <button
+                class="btn btn-warning btn-action mb-3"
+                :disabled="!documentList.length"
+                @click="resetData"
+            >
+                Сбросить
+            </button>
+            <button
+                class=" btn btn-success btn-action mb-3"
+                :disabled="!isDocumentListChecked"
+                @click="checkDocumentList"
+            >
+                Подтвердить
+            </button>
+        </div>
         <ul class="list-group">
             <li
                 v-for="(it, i) in documentList"
@@ -30,6 +39,9 @@
                 </b>
             </li>
         </ul>
+        <div v-if="isDocumentListLoading">
+            Loading list...
+        </div>
         <b-modal
             v-model="modal.isShown"
             class="text-center"
@@ -37,6 +49,7 @@
             title="Готово!"
             :ok-title="modal.okTitle"
             ok-variant="success"
+            :ok-disabled="!documentList.length"
             ok-only
             centered
             @hidden="processResult"
@@ -49,7 +62,15 @@
             </h4>
             <h5>{{ modal.message }}</h5>
             <p v-if="!documentsCheckSubmitted">
-                Отсканировано {{ documentsChecked }} из {{ documentList.length }}
+                <span v-if="!isDocumentListLoading">
+                    Отсканировано {{ documentsChecked }} из {{ documentList.length }}
+                </span>
+                <span
+                    v-else
+                    class="loading-doсuments"
+                >
+                    loading...
+                </span>
             </p>
         </b-modal>
     </div>
@@ -69,6 +90,7 @@ export default {
         documentNumber: '',
         document: null,
         isDocumentLoading: false,
+        isDocumentListLoading: false,
         documentList: [],
         areaPassNumber: null,
         documentsCheckSubmitted: false,
@@ -95,92 +117,112 @@ export default {
         },
     },
     methods: {
-        async getDocumentList() {
-            return new Promise(async resolve => {
-                this.isDocumentLoading = true;
-                this.document = await this.$http.get(
-                    `documents/number/${this.documentNumber}`,
+        async getDocument(documentNumber) {
+            this.isDocumentLoading = true;
+            this.document = await this.$http
+                .get(`documents/number/${documentNumber}`)
+                .finally(() => {
+                    this.isDocumentLoading = false;
+                });
+
+            this.document.status = 'compound out';
+            this.modal.message = documentNumber;
+            this.modal.isShown = true;
+        },
+        async getDocumentList(documentNumber) {
+            if (this.document.lotId) {
+                this.isDocumentListLoading = true;
+                const whenDocumentListIsLoaded = this.$http.get(
+                    `lots/${this.document.lotId}/documents`,
                 );
-                this.isDocumentLoading = false;
 
-                this.document.lotId = 123;
+                const whenAreaPassNumberIsLoaded = (async () => {
+                    let areaPassNumber = null;
+                    if (this.user.area.passRequired) {
+                        ({ areaPassNumber } = await this.$http.get(
+                            `lots/${this.document.lotId}`,
+                        ));
+                    }
+                    return areaPassNumber;
+                })();
 
-                if (this.document.lotId) {
-                    const getDocumentList = new Promise(async innerResolve => {
-                        this.documentList = await this.$http.get(
-                            `lots/${this.document.lotId}/documents`,
-                        );
-                        innerResolve();
-                    });
+                const [documentList, areaPassNumber] = await Promise.all([
+                    whenDocumentListIsLoaded,
+                    whenAreaPassNumberIsLoaded,
+                ]).finally(() => {
+                    this.isDocumentListLoading = false;
+                });
 
-                    const getAreaPassNumber = new Promise(
-                        async innerResolve => {
-                            if (this.user.area.passRequired) {
-                                const lot = await this.$http.get(
-                                    `lots/${this.document.lotId}`,
-                                );
-                                this.areaPassNumber = lot.areaPassNumber;
-                                innerResolve();
-                            }
-                            innerResolve();
-                        },
-                    );
+                documentList.forEach(it => {
+                    it.status = '';
+                });
 
-                    await Promise.all([getDocumentList, getAreaPassNumber]);
-                    resolve();
-                } else {
-                    this.documentList.push(this.document);
-                    resolve();
-                }
-            });
+                this.documentList = documentList;
+                this.areaPassNumber = areaPassNumber;
+
+                const scannedDocument = this.documentList.find(
+                    it => it.number === documentNumber,
+                );
+                scannedDocument.status = 'compound out';
+            } else {
+                this.documentList.push(this.document);
+            }
         },
         checkDocumentList() {},
         async onInput(result) {
             this.documentNumber = result;
-            if (!this.document && !this.isDocumentLoading) {
-                await this.getDocumentList();
-            }
         },
         async onDecode(result) {
             this.documentNumber = result;
-            if (!this.document && !this.isDocumentLoading) {
-                await this.getDocumentList();
+            if (!this.documentList.length && !this.isDocumentLoading) {
+                await this.getDocument(result);
+                await this.getDocumentList(result);
+            } else {
+                this.checkDocument(result);
             }
-
+        },
+        checkDocument(documentNumber) {
             const scannedDocument = this.documentList.find(
-                it => it.number === result,
+                it => it.number === documentNumber,
             );
 
             if (scannedDocument) {
                 if (scannedDocument.status !== 'compound out') {
                     scannedDocument.status = 'compound out';
                     this.modal.heading = 'Документ';
-                    this.modal.message = result;
+                    this.modal.message = documentNumber;
                 } else {
                     this.modal.heading = '';
-                    this.modal.message = `Документ ${result} уже отсканирован!`;
+                    this.modal.message = `Документ ${documentNumber} уже отсканирован!`;
                 }
             } else {
                 this.modal.heading = '';
-                this.modal.message = `Нет совпадений по номеру ${result}`;
+                this.modal.message = `Нет совпадений по номеру ${documentNumber}`;
             }
 
             this.modal.isShown = true;
         },
         processResult() {
+            if (this.isDocumentListLoading) {
+                this.$store.commit('hideScanScreen');
+            }
+
             if (this.isDocumentListChecked) {
                 this.$store.commit('hideScanScreen');
                 this.modal.okTitle = 'Ок';
             }
 
             if (this.documentsCheckSubmitted) {
-                this.$router.push('/scan-TTN');
+                this.$router.push('/shipment-confirmation');
             }
 
             this.documentNumber = '';
         },
         hideScanScreen() {
             this.$store.commit('hideScanScreen');
+        },
+        resetData() {
+            Object.assign(this.$data, this.$options.data());
         },
     },
     beforeRouteLeave(to, from, next) {
@@ -193,3 +235,8 @@ export default {
     },
 };
 </script>
+<style lang="scss" scoped>
+.btn-action {
+    width: 49%;
+}
+</style>

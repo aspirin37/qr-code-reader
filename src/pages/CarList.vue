@@ -50,6 +50,12 @@
                 </b>
             </li>
         </ul>
+        <div
+            v-if="!carList.length"
+            class="text-center text-danger"
+        >
+            Список машин по документу <b class="text-nowrap">{{ scannedDocument.number }}</b> не получен.
+        </div>
         <b-modal
             v-model="modal.isShown"
             class="text-center"
@@ -129,10 +135,9 @@ export default {
         },
         async checkCarList() {
             // prettier-ignore
-            const promises = this.carList.map(it => new Promise(async resolve => {
+            const promises = this.carList.map(it => async () => {
                 await this.$http.put(`/cars/${it.VIN}`, it);
-                resolve();
-            }));
+            });
             await Promise.all(promises);
 
             this.modal.message = `Проверка VIN-номеров по документу ${

@@ -11,7 +11,7 @@ axiosInstance.interceptors.request.use(
     config => config,
     error => {
         store.commit('showErrorMessage', error.message);
-        return error;
+        return Promise.reject(error);
     },
 );
 
@@ -19,7 +19,7 @@ axiosInstance.interceptors.response.use(
     response => response.data,
     error => {
         store.commit('showErrorMessage', error.message);
-        return error;
+        return Promise.reject(error);
     },
 );
 

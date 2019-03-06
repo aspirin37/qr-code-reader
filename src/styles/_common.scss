@@ -47,6 +47,10 @@ body {
     &-success {
         box-shadow: inset 0 -0.6em 6px -0.35em rgba(0, 0, 0, 0.17);
     }
+
+    &-warning {
+        box-shadow: inset 0 -0.6em 6px -0.35em rgba(0, 0, 0, 0.1);
+    }
 }
 
 .form-control:disabled {
