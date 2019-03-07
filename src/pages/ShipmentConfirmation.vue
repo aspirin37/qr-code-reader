@@ -7,12 +7,10 @@
             @input="onInput"
             @decode="onDecode"
         />
-        <div
-            v-if="documentList.length"
-            class="d-flex justify-content-between"
-        >
+        <div class="d-flex justify-content-between">
             <button
                 class="btn btn-warning btn-action mb-3"
+                :disabled="!documentList.length"
                 @click="resetData"
             >
                 Сбросить
