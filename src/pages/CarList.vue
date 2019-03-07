@@ -144,17 +144,27 @@ export default {
                 return null;
             });
 
-            const url = this.scannedDocument.lotId
-                ? `lots/${this.scannedDocument.lotId}`
-                : `documents/${this.scannedDocument.id}`;
+            let url;
+            let params;
 
-            // prettier-ignore
-            const params = {
-                id: this.scannedDocument.lotId ? this.scannedDocument.lotId : this.scannedDocument.id,
-                number: this.scannedDocument.lotId ? null : this.scannedDocument.number,
-                status: 'pre-scan',
-                scans,
-            };
+            if (this.scannedDocument.lotId) {
+                url = `lots/${this.scannedDocument.lotId}`;
+
+                params = {
+                    id: this.scannedDocument.lotId,
+                    status: 'pre-scan',
+                    scans,
+                };
+            } else {
+                url = `documents/${this.scannedDocument.id}`;
+
+                params = {
+                    id: this.scannedDocument.id,
+                    number: this.scannedDocument.number,
+                    status: 'pre-scan',
+                    scans,
+                };
+            }
 
             await this.$http.put(url, params);
 

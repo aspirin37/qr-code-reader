@@ -179,17 +179,27 @@ export default {
                 return null;
             });
 
-            const url = this.document.lotId
-                ? `lots/${this.document.lotId}`
-                : `documents/${this.document.id}`;
+            let url;
+            let params;
 
-            // prettier-ignore
-            const params = {
-                id: this.document.lotId ? this.document.lotId : this.document.id,
-                number: this.document.lotId ? null : this.document.number,
-                status: 'compound out',
-                scans,
-            };
+            if (this.document.lotId) {
+                url = `lots/${this.document.lotId}`;
+
+                params = {
+                    id: this.document.lotId,
+                    status: 'compound out',
+                    scans,
+                };
+            } else {
+                url = `documents/${this.document.id}`;
+
+                params = {
+                    id: this.document.id,
+                    number: this.document.number,
+                    status: 'compound out',
+                    scans,
+                };
+            }
 
             await this.$http.put(url, params);
 
