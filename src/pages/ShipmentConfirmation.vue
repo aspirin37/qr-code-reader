@@ -7,10 +7,12 @@
             @input="onInput"
             @decode="onDecode"
         />
-        <div class="d-flex justify-content-between">
+        <div
+            v-if="documentList.length"
+            class="d-flex justify-content-between"
+        >
             <button
                 class="btn btn-warning btn-action mb-3"
-                :disabled="!documentList.length"
                 @click="resetData"
             >
                 Сбросить
@@ -168,7 +170,37 @@ export default {
                 this.documentList.push(this.document);
             }
         },
-        checkDocumentList() {},
+        async checkDocumentList() {
+            const scans = this.documentList.map(it => {
+                if (it.status === 'compound out') {
+                    return {
+                        value: it.number,
+                        manualInput: it.manualInput,
+                    };
+                }
+                return null;
+            });
+
+            const url = this.document.lotId
+                ? `lots/${this.document.lotId}`
+                : `documents/${this.document.id}`;
+
+            // prettier-ignore
+            const params = {
+                id: this.document.lotId ? this.document.lotId : this.document.id,
+                number: this.document.lotId ? null : this.document.number,
+                status: 'compound out',
+                scans,
+            };
+
+            await this.$http.put(url, params);
+
+            this.modal.message = 'Проверка документов успешно завершена';
+
+            this.modal.heading = '';
+            this.documentsCheckSubmitted = true;
+            this.modal.isShown = true;
+        },
         async onInput(result) {
             this.documentNumber = result;
         },
@@ -213,7 +245,7 @@ export default {
             }
 
             if (this.documentsCheckSubmitted) {
-                this.$router.push('/shipment-confirmation');
+                this.resetData();
             }
 
             this.documentNumber = '';

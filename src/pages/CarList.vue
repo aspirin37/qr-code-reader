@@ -134,11 +134,29 @@ export default {
             });
         },
         async checkCarList() {
-            // prettier-ignore
-            const promises = this.carList.map(it => async () => {
-                await this.$http.put(`/cars/${it.VIN}`, it);
+            const scans = this.carList.map(it => {
+                if (it.status === 'pre-scan') {
+                    return {
+                        value: it.VIN,
+                        manualInput: it.manualInput,
+                    };
+                }
+                return null;
             });
-            await Promise.all(promises);
+
+            const url = this.scannedDocument.lotId
+                ? `lots/${this.scannedDocument.lotId}`
+                : `documents/${this.scannedDocument.id}`;
+
+            // prettier-ignore
+            const params = {
+                id: this.scannedDocument.lotId ? this.scannedDocument.lotId : this.scannedDocument.id,
+                number: this.scannedDocument.lotId ? null : this.scannedDocument.number,
+                status: 'pre-scan',
+                scans,
+            };
+
+            await this.$http.put(url, params);
 
             this.modal.message = `Проверка VIN-номеров по документу ${
                 this.scannedDocument.description

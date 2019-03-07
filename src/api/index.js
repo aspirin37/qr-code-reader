@@ -18,7 +18,8 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
     response => response.data,
     error => {
-        store.commit('showErrorMessage', error.message);
+        const message = error.response.data.Error ? error.response.data.Error.message : error.message;
+        store.commit('showErrorMessage', message);
         return Promise.reject(error);
     },
 );
