@@ -12,7 +12,7 @@
     "deploy": "node build/deployWABS.js",
     "setup-lint": "npm i --g eslint babel-eslint eslint-plugin-import eslint-config-airbnb-base eslint-plugin-vue eslint-plugin-jest",
     "lint": "eslint --fix --ext .js,.vue src",
-    "test": "jest --config test/jest.conf.js"
+    "test": "jest --config test/jest.conf.js --verbose"
   },
   "dependencies": {
     "applicationinsights-js": "^1.0.20",
