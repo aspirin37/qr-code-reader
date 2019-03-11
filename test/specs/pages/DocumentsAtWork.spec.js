@@ -31,10 +31,10 @@ describe('Documents at work', () => {
     it('Renders documents correctly', () => {
         expect(wrapper.vm.documentList.length).toBe(2);
 
-        const lastDocumentDescription = wrapper.find('li:last-of-type span').element.textContent;
+        const lastDocumentDescription = wrapper.find('li:last-of-type span').text();
         expect(lastDocumentDescription).toBe('DK-659874');
 
-        const lastDocumentUserName = wrapper.find('li:last-of-type span:last-of-type').element.textContent;
+        const lastDocumentUserName = wrapper.find('li:last-of-type span:last-of-type').text();
         expect(lastDocumentUserName).toBe('IIVANOV');
     });
 });
