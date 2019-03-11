@@ -5,10 +5,6 @@
                 Документы в работе:
             </div>
             <ul class="list-group">
-                <!-- <li class="list-group-item justify-content-between align-items-baseline">
-                    <span>Документ</span>
-                    <small>Ответственный</small>
-                </li> -->
                 <li
                     v-for="(it, i) in documentList"
                     :key="i"
@@ -19,7 +15,10 @@
                 </li>
             </ul>
         </template>
-        <div v-else>
+        <div
+            v-else
+            class="text-center p-4"
+        >
             loading...
         </div>
     </div>
