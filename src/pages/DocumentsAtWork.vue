@@ -1,6 +1,6 @@
 <template>
     <div class="page">
-        <template v-if="documentList">
+        <template v-if="documentList && documentList.length">
             <ul class="list-group">
                 <li class="list-group-item justify-content-between bg-light">
                     <span>ТТН/Акт</span>
@@ -16,11 +16,13 @@
                 </li>
             </ul>
         </template>
-        <div
-            v-else
-            class="text-center p-4"
-        >
-            loading...
+        <div class="mock-text">
+            <span v-if="documentList && !documentList.length">
+                Нет документов в работе.
+            </span>
+            <span v-if="!documentList">
+                loading...
+            </span>
         </div>
     </div>
 </template>
@@ -53,5 +55,11 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.mock-text {
+    padding: 1.5rem;
+    text-align: center;
+    font-size: 18px;
 }
 </style>
