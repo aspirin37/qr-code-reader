@@ -1,29 +1,38 @@
 <template>
     <div class="page">
-        <template v-if="documentList && documentList.length">
-            <ul class="list-group">
-                <li class="list-group-item justify-content-between bg-light">
-                    <span>ТТН/Акт</span>
-                    <span>Пользователь</span>
-                </li>
-                <li
-                    v-for="(it, i) in documentList"
-                    :key="i"
-                    class="list-group-item justify-content-between"
-                >
-                    <span>{{ it.description }}</span>
-                    <span>{{ it.userName }}</span>
-                </li>
-            </ul>
-        </template>
-        <div class="mock-text">
-            <span v-if="documentList && !documentList.length">
+        <transition
+            name="fade"
+            mode="out-in"
+        >
+            <template v-if="documentList && documentList.length">
+                <ul class="list-group">
+                    <li class="list-group-item justify-content-between bg-light">
+                        <span>ТТН/Акт</span>
+                        <span>Пользователь</span>
+                    </li>
+                    <li
+                        v-for="(it, i) in documentList"
+                        :key="i"
+                        class="list-group-item justify-content-between"
+                    >
+                        <span>{{ it.description }}</span>
+                        <span>{{ it.userName }}</span>
+                    </li>
+                </ul>
+            </template>
+            <div
+                v-if="documentList && !documentList.length"
+                class="mock-text"
+            >
                 Нет документов в работе.
-            </span>
-            <span v-if="!documentList">
+            </div>
+            <div
+                v-if="!documentList"
+                class="mock-text"
+            >
                 loading...
-            </span>
-        </div>
+            </div>
+        </transition>
     </div>
 </template>
 
