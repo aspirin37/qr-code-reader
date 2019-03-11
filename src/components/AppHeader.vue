@@ -53,11 +53,11 @@ export default {
                 link: '/shipment-confirmation',
                 role: 'dispatch',
             },
-            {
-                label: 'Документы в работе',
-                link: '/',
-                role: 'atWork',
-            },
+            // {
+            //     label: 'Документы в работе',
+            //     link: '/',
+            //     role: 'atWork',
+            // },
         ],
     }),
     computed: {
