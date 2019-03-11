@@ -1,10 +1,11 @@
 <template>
     <div class="page">
         <template v-if="documentList">
-            <div class="title">
-                Документы в работе:
-            </div>
             <ul class="list-group">
+                <li class="list-group-item justify-content-between bg-light">
+                    <span>ТТН/Акт</span>
+                    <span>Пользователь</span>
+                </li>
                 <li
                     v-for="(it, i) in documentList"
                     :key="i"
@@ -45,5 +46,12 @@ export default {
     padding-left: 0.5rem;
     margin-bottom: 0.6rem;
     font-size: 20px;
+}
+
+.list-group-item span {
+    width: 49%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 </style>

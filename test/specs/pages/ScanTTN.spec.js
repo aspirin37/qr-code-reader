@@ -11,7 +11,13 @@ localVue.use(BootstrapVue);
 
 describe('Scan TTN page', () => {
     const state = {};
-    const store = new Vuex.Store({ state });
+    const mutations = {
+        changeScannedDocument: jest.fn(),
+    };
+    const store = new Vuex.Store({
+        state,
+        mutations,
+    });
 
     const $router = {
         push: jest.fn(),
