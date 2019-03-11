@@ -6,13 +6,16 @@ module.exports = {
     },
     env: {
         browser: true,
+        "jest/globals": true
     },
     extends: [
         "plugin:vue/recommended",
         "airbnb-base",
+        "plugin:jest/recommended"
     ],
     plugins: [
-        "vue"
+        "vue",
+        "jest"
     ],
     rules: {
         "arrow-parens": "off",

@@ -1,3 +1,4 @@
 **/application-insights/*
 **/build/*
 **/config/*
+**/test/jest.config.js

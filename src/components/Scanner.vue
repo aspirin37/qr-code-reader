@@ -32,7 +32,6 @@
             <qrcode-reader
                 v-if="isScanScreenShown"
                 @decode="onDecode"
-                @initialized="onInitialized"
             />
         </transition>
     </div>
@@ -62,7 +61,6 @@ export default {
         },
     },
     data: () => ({
-        loader: false,
         result: '',
     }),
     computed: {
@@ -77,9 +75,6 @@ export default {
         startScanning() {
             this.loader = true;
             this.$store.commit('showScanScreen');
-        },
-        onInitialized() {
-            this.loader = false;
         },
         onInput() {
             this.$emit('input', this.result);

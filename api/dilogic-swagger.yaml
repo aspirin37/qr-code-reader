@@ -1,0 +1,535 @@
+swagger: '2.0'
+info:
+  title: Dilogic dispatch
+  version: '1.0'
+  description: |-
+    Dilogic dispatch API
+    Try at https://api200.portal.azure-api.net/ 
+host: api200.azure-api.net
+basePath: /dilogic
+schemes:
+  - https
+securityDefinitions:
+  apiKeyHeader:
+    type: apiKey
+    name: Ocp-Apim-Subscription-Key
+    in: header
+  apiKeyQuery:
+    type: apiKey
+    name: subscription-key
+    in: query
+security:
+  - apiKeyHeader: []
+  - apiKeyQuery: []
+paths:
+  /documents:
+    get:
+      description: get-documents
+      operationId: get-documents
+      summary: get-documents
+      tags:
+        - documents
+      responses:
+        '200':
+          description: Successfully return
+          schema:
+            $ref: '#/definitions/DocumentsList'
+        '204':
+          description: documents collection empty
+      produces:
+        - application/json
+  '/lots/{lotId}/cars':
+    get:
+      description: get-cars-from-lot
+      operationId: get-cars-from-lot
+      summary: get-cars-from-lot
+      tags:
+        - cars
+      parameters:
+        - name: lotId
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successfully return
+          schema:
+            $ref: '#/definitions/CarsList'
+        '404':
+          description: lot not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '501':
+          description: lot or cars at lot does not ready for dispatch
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      produces:
+        - application/json
+  '/documents/{documentId}/cars':
+    get:
+      description: get-cars-from-document
+      operationId: get-cars-from-document
+      summary: get-cars-from-document
+      tags:
+        - cars
+      parameters:
+        - name: documentId
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successfully return
+          schema:
+            $ref: '#/definitions/CarsList'
+        '404':
+          description: document not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '501':
+          description: document or cars at document does not ready for dispatch
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      produces:
+        - application/json
+  /users/current:
+    get:
+      description: get-user-current
+      operationId: get-user-current
+      summary: get-user-current
+      tags:
+        - users
+      responses:
+        '200':
+          description: Successfully return user
+          schema:
+            $ref: '#/definitions/UserObject'
+        '403':
+          description: user does not have assigned area
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '404':
+          description: user not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      produces:
+        - application/json
+  '/documents/number/{documentNumber}':
+    get:
+      description: get-document-number
+      operationId: get-document-number
+      summary: get-document-number
+      tags:
+        - documents
+      parameters:
+        - name: documentNumber
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successfully return
+          schema:
+            $ref: '#/definitions/DocumentObject'
+        '404':
+          description: document not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '501':
+          description: lot or document at lot does not ready for dispatch
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      produces:
+        - application/json
+  '/lots/{lotId}/documents':
+    get:
+      description: get-documents-from-lot
+      operationId: get-documents-from-lot
+      summary: get-documents-from-lot
+      tags:
+        - documents
+      parameters:
+        - name: lotId
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successfully return
+          schema:
+            $ref: '#/definitions/DocumentsList'
+        '204':
+          description: documents collection empty
+        '404':
+          description: lot not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      produces:
+        - application/json
+  '/lots/{lotId}':
+    get:
+      description: get-lot
+      operationId: get-lot
+      summary: get-lot
+      tags:
+        - lots
+      parameters:
+        - name: lotId
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successfully return lot
+          schema:
+            $ref: '#/definitions/LotObject'
+        '404':
+          description: Lot not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      produces:
+        - application/json
+    put:
+      description: put-lot
+      operationId: put-lot
+      summary: put-lot
+      tags:
+        - lots
+      parameters:
+        - name: lotId
+          in: path
+          required: true
+          type: string
+        - name: lotObject
+          in: body
+          schema:
+            $ref: '#/definitions/LotObject'
+      consumes:
+        - application/json
+      responses:
+        '204':
+          description: Successfully update lot
+        '403':
+          description: area does not assign to current user
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '404':
+          description: lot not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '501':
+          description: Request does not ready
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      produces:
+        - application/json
+  '/documents/{documentId}':
+    put:
+      description: put-document
+      operationId: put-document
+      summary: put-document
+      tags:
+        - documents
+      parameters:
+        - name: documentId
+          in: path
+          required: true
+          type: string
+        - name: documentObject
+          in: body
+          schema:
+            $ref: '#/definitions/DocumentObject'
+      consumes:
+        - application/json
+      responses:
+        '204':
+          description: Successfully update document
+        '403':
+          description: area does not assign to current user
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '404':
+          description: document not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '501':
+          description: Request does not ready
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      produces:
+        - application/json
+  '/cars/{VIN}':
+    get:
+      description: get-car
+      operationId: get-car
+      summary: get-car
+      tags:
+        - cars
+      parameters:
+        - name: VIN
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successfully return
+          schema:
+            $ref: '#/definitions/CarObject'
+        '404':
+          description: car not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      produces:
+        - application/json
+    put:
+      description: put-car
+      operationId: put-car
+      summary: put-car
+      tags:
+        - cars
+      parameters:
+        - name: VIN
+          in: path
+          required: true
+          type: string
+        - name: carObject
+          in: body
+          schema:
+            $ref: '#/definitions/CarObject'
+      consumes:
+        - application/json
+      responses:
+        '204':
+          description: Successfully update car
+        '403':
+          description: area does not assign to current user
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '404':
+          description: car not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '501':
+          description: Request does not ready
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      produces:
+        - application/json
+definitions:
+  UserObject:
+    type: object
+    properties:
+      roles:
+        type: array
+        example:
+          - pre-scan
+          - atWork
+          - dispatch
+        items:
+          type: string
+          enum:
+            - pre-scan
+            - atWork
+            - dispatch
+            - compoundIn
+      area:
+        type: object
+        required:
+          - id
+          - description
+          - passRequired
+          - manualInputPass
+        properties:
+          id:
+            type: string
+            example: e8bd66b6-c6eb-4b93-818b-40fb1381401f
+          description:
+            type: string
+            example: Всеволожск
+          passRequired:
+            type: boolean
+            example: true
+          manualInputPass:
+            type: string
+            example: 9102
+  LotObject:
+    type: object
+    required:
+      - id
+      - status
+    properties:
+      areaId:
+        type: string
+        example: e8bd66b6-c6eb-4b93-818b-40fb1381401f
+      id:
+        type: string
+        example: 6d9dafd4-9ce3-47ce-85b8-dc35dac338de
+      userName:
+        type: string
+        example: AKOROLE7
+      areaPassNumber:
+        type: string
+        example: 6
+      status:
+        type: string
+        example: pre-scan
+        enum:
+          - pre-scan
+          - compound out
+      scans:
+        type: array
+        items:
+          type: object
+          properties:
+            value:
+              type: string
+              example: Z6FLXXECH
+            manualInput:
+              type: boolean
+              example: true
+  DocumentObject:
+    type: object
+    required:
+      - id
+      - number
+      - status
+    properties:
+      id:
+        type: string
+        example: 8bcfc9e5-ca11-42d5-a3a9-f3e1d150c226
+      number:
+        type: string
+        example: ES123456
+      description:
+        type: string
+        example: ES-123456
+      lotId:
+        type: string
+        example: null
+      userName:
+        type: string
+        example: AALEXAN
+      status:
+        type: string
+        example: compound out
+        enum:
+          - pre-scan
+          - compound out
+      scans:
+        type: array
+        items:
+          type: object
+          properties:
+            value:
+              type: string
+              example: ES123456
+            manualInput:
+              type: boolean
+              example: false
+  DocumentsList:
+    type: array
+    items:
+      type: object
+      required:
+        - id
+        - number
+      properties:
+        id:
+          type: string
+          example: 8bcfc9e5-ca11-42d5-a3a9-f3e1d150c226
+        number:
+          type: string
+          example: ES-123456
+        description:
+          type: string
+          example: ES-123456
+        lotId:
+          type: string
+          example: 6d9dafd4-9ce3-47ce-85b8-dc35dac338de
+        userName:
+          type: string
+          example: SSIDOROV
+  CarObject:
+    type: object
+    required:
+      - documentId
+      - VIN
+      - status
+    properties:
+      VIN:
+        type: string
+        example: Z6FXXXESGXHJ56977
+      documentId:
+        type: string
+        example: a7473c33-0f1d-43f0-898b-cf826e77df8e
+      lotId:
+        type: string
+        example: b8273c22-0f1d-43f0-898b-cf826e77df81
+      manualInput:
+        type: boolean
+        example: false
+      status:
+        type: string
+        enum:
+          - pre-scan
+          - compound out
+          - compound in
+        example: compound out
+      model:
+        type: string
+        example: Transit Van
+      color:
+        type: string
+        example: Белый
+  CarsList:
+    type: array
+    items:
+      type: object
+      required:
+        - VIN
+        - documentId
+      properties:
+        VIN:
+          type: string
+          example: Z6FBXXESWBFY34440
+        documentId:
+          type: string
+          example: a7473c33-0f1d-43f0-898b-cf826e77df8e
+        lotId:
+          type: string
+          example: d7473c33-0f1d-43f0-898b-cf826e77df85
+        manualInput:
+          type: boolean
+          example: false
+        status:
+          type: string
+          example: compound in
+          enum:
+            - pre-scan
+            - compound out
+            - compound in
+        model:
+          type: string
+          example: Ecosport
+        color:
+          type: string
+          example: Белый
+  ErrorResponse:
+    type: object
+    required:
+      - error
+    properties:
+      error:
+        type: object
+        required:
+          - message
+        properties:
+          code:
+            type: string
+          message:
+            type: string
+    example:
+      error:
+        code: ''
+        message: Document ES-98562 not found
+tags: []
