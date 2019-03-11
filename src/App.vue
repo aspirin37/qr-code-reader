@@ -14,7 +14,9 @@
             centered
             @hidden="hideScanScreen"
         >
-            {{ errorMessage }}
+            <div class="text-center">
+                {{ errorMessage }}
+            </div>
         </b-modal>
     </div>
 </template>

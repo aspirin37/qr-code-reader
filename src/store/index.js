@@ -31,8 +31,10 @@ const store = new Vuex.Store({
             state.user = payload;
         },
         showErrorMessage: (state, payload) => {
-            state.errorMessage = payload;
-            state.isErrorShown = true;
+            if (!state.isErrorShown) {
+                state.errorMessage = payload;
+                state.isErrorShown = true;
+            }
         },
         clearErrorMessage: state => {
             state.errorMessage = '';
@@ -48,15 +50,6 @@ const store = new Vuex.Store({
             state.isScanScreenShown = false;
             state.errorMessage = '';
             state.isErrorShown = false;
-        },
-    },
-
-    getters: {
-        userArea: state => {
-            if (state.user) {
-                return state.user.area.description;
-            }
-            return '';
         },
     },
 });

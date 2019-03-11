@@ -11,15 +11,16 @@ axiosInstance.interceptors.request.use(
     config => config,
     error => {
         store.commit('showErrorMessage', error.message);
-        return error;
+        return Promise.reject(error);
     },
 );
 
 axiosInstance.interceptors.response.use(
     response => response.data,
     error => {
-        store.commit('showErrorMessage', error.message);
-        return error;
+        const message = error.response.data.Error ? error.response.data.Error.message : error.message;
+        store.commit('showErrorMessage', message);
+        return Promise.reject(error);
     },
 );
 
