@@ -4,7 +4,7 @@
         class="page"
     >
         <scanner
-            :title="scannerTitle"
+            title="VIN-номер"
             button-title="Сканировать VIN"
             :value="VIN"
             @input="onInput"
@@ -91,7 +91,6 @@ export default {
         Scanner,
     },
     data: () => ({
-        scannerTitle: 'VIN-номер',
         loader: true,
         isVinListShown: true,
         carList: [],

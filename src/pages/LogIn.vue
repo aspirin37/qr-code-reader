@@ -39,8 +39,11 @@ export default {
                 case 'dispatch':
                     this.$router.push('/shipment-confirmation');
                     break;
-                case 'atWork':
+                case 'CompoundIn':
                     this.$router.push('/documents-at-work');
+                    break;
+                case 'atWork':
+                    this.$router.push('/shipment-acceptance');
                     break;
                 default:
                     throw new Error('User role not found');
