@@ -21,7 +21,9 @@
             @ok="acceptShipment"
             @hidden="hideScanScreen"
         >
-            <h4 class="font-weight-normal">VIN-номер</h4>
+            <h4 class="font-weight-normal">
+                VIN-номер
+            </h4>
             <h5>{{ VIN }}</h5>
             <h6>{{ car.model }}<br>{{ car.color }}</h6>
         </b-modal>
@@ -66,7 +68,7 @@ export default {
                 ...this.car,
                 status: 'compound in',
             };
-            await this.$http.put(`cars/${this.VIN}`);
+            await this.$http.put(`cars/${this.VIN}`, params);
             this.isSuccessModalShown = true;
         },
         onInput(result) {
