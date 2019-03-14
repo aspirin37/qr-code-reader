@@ -1,6 +1,6 @@
 <template>
     <div class="page">
-        <template v-if="documentList">
+        <template v-if="documentList && documentList.length">
             <ul class="list-group">
                 <li class="list-group-item justify-content-between bg-light">
                     <span>ТТН/Акт</span>
@@ -17,7 +17,13 @@
             </ul>
         </template>
         <div
-            v-else
+            v-if="documentList && !documentList.length"
+            class="text-center p-4"
+        >
+            Нет документов в работе.
+        </div>
+        <div
+            v-if="!documentList"
             class="text-center p-4"
         >
             loading...
@@ -36,7 +42,7 @@ export default {
     },
     methods: {
         async getDocuments() {
-            this.documentList = await this.$http.get('documents');
+            this.documentList = (await this.$http.get('documents')) || [];
         },
     },
 };

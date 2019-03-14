@@ -74,7 +74,7 @@
                 {{ modal.heading }}
             </h4>
             <h5>{{ modal.message }}</h5>
-            <p v-if="!isCarCheckSubmitted">
+            <p v-if="!isCarCheckSubmitted && carList.length > 1">
                 Отсканировано {{ carsChecked }} из {{ carList.length }}
             </p>
         </b-modal>

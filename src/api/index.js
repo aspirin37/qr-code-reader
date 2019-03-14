@@ -4,7 +4,7 @@ import store from '../store';
 const axiosInstance = axios.create({
     baseURL: process.env.API_URL,
     withCredentials: true,
-    headers: { 'Ocp-Apim-Subscription-Key': process.env.API_TOKEN },
+    // headers: { 'Ocp-Apim-Subscription-Key': process.env.API_TOKEN },
 });
 
 axiosInstance.interceptors.request.use(

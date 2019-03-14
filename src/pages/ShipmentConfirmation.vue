@@ -62,7 +62,7 @@
             </h4>
             <h5>{{ modal.message }}</h5>
             <p v-if="!documentsCheckSubmitted">
-                <span v-if="!isDocumentListLoading">
+                <span v-if="!isDocumentListLoading && documentList.length > 1">
                     Отсканировано {{ documentsChecked }} из {{ documentList.length }}
                 </span>
                 <span
