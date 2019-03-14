@@ -1,10 +1,12 @@
 import axios from 'axios';
 import store from '../store';
 
+const headers = process.env.API_TOKEN ? { 'Ocp-Apim-Subscription-Key': process.env.API_TOKEN } : null;
+
 const axiosInstance = axios.create({
     baseURL: process.env.API_URL,
     withCredentials: true,
-    // headers: { 'Ocp-Apim-Subscription-Key': process.env.API_TOKEN },
+    headers,
 });
 
 axiosInstance.interceptors.request.use(
