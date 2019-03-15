@@ -66,7 +66,7 @@
                     Отсканировано {{ documentsChecked }} из {{ documentList.length }}
                 </span>
                 <span
-                    v-else
+                    v-if="isDocumentListLoading"
                     class="loading-doсuments"
                 >
                     loading...
