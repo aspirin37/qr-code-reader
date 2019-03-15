@@ -173,7 +173,7 @@ export default {
                 if (it.status === 'compound out') {
                     return {
                         value: it.number,
-                        manualInput: it.manualInput,
+                        manualInput: false,
                     };
                 }
                 return null;
