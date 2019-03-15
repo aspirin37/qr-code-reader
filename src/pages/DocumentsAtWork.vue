@@ -47,7 +47,7 @@ export default {
     },
     methods: {
         async getDocuments() {
-            this.documentList = await this.$http.get('documents');
+            this.documentList = (await this.$http.get('documents')) || [];
         },
     },
 };

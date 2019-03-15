@@ -54,6 +54,11 @@ export default {
                 role: 'dispatch',
             },
             {
+                label: 'Подтверждение приемки',
+                link: '/shipment-acceptance',
+                role: 'CompoundIn',
+            },
+            {
                 label: 'Документы в работе',
                 link: '/documents-at-work',
                 role: 'atWork',

@@ -62,11 +62,11 @@
             </h4>
             <h5>{{ modal.message }}</h5>
             <p v-if="!documentsCheckSubmitted">
-                <span v-if="!isDocumentListLoading">
+                <span v-if="!isDocumentListLoading && documentList.length > 1">
                     Отсканировано {{ documentsChecked }} из {{ documentList.length }}
                 </span>
                 <span
-                    v-else
+                    v-if="isDocumentListLoading"
                     class="loading-doсuments"
                 >
                     loading...
@@ -173,7 +173,7 @@ export default {
                 if (it.status === 'compound out') {
                     return {
                         value: it.number,
-                        manualInput: it.manualInput,
+                        manualInput: false,
                     };
                 }
                 return null;

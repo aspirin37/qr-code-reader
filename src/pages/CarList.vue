@@ -4,7 +4,7 @@
         class="page"
     >
         <scanner
-            :title="scannerTitle"
+            title="VIN-номер"
             button-title="Сканировать VIN"
             :value="VIN"
             @input="onInput"
@@ -74,7 +74,7 @@
                 {{ modal.heading }}
             </h4>
             <h5>{{ modal.message }}</h5>
-            <p v-if="!isCarCheckSubmitted">
+            <p v-if="!isCarCheckSubmitted && carList.length > 1">
                 Отсканировано {{ carsChecked }} из {{ carList.length }}
             </p>
         </b-modal>
@@ -91,7 +91,6 @@ export default {
         Scanner,
     },
     data: () => ({
-        scannerTitle: 'VIN-номер',
         loader: true,
         isVinListShown: true,
         carList: [],

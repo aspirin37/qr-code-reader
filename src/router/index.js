@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import ScanTTN from '@/pages/ScanTTN';
+import ShipmentAcceptance from '@/pages/ShipmentAcceptance';
 import ShipmentConfirmation from '@/pages/ShipmentConfirmation';
 import DocumentsAtWork from '@/pages/DocumentsAtWork';
 import CarList from '@/pages/CarList';
@@ -26,6 +27,11 @@ export default new Router({
             path: '/scan-TTN',
             name: 'Scan TTN',
             component: ScanTTN,
+        },
+        {
+            path: '/shipment-acceptance',
+            name: 'Shipment acceptance',
+            component: ShipmentAcceptance,
         },
         {
             path: '/shipment-confirmation',
