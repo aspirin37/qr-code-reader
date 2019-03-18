@@ -174,6 +174,8 @@ export default {
             this.modal.heading = '';
             this.isCarCheckSubmitted = true;
             this.modal.isShown = true;
+
+            this.$store.commit('changeScannedDocument', null);
         },
         onInput(result) {
             this.VIN = result;
