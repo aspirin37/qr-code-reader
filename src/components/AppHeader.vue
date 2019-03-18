@@ -127,6 +127,11 @@ header {
         font-size: 22px;
         color: inherit;
         text-decoration: none;
+        transition-delay: 0.15s;
+
+        &.router-link-active {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
 
         &--logout {
             margin-top: auto;

@@ -1,8 +1,8 @@
 <template>
     <div class="page">
         <scanner
-            :title="scannerTitle"
             button-title="Сканировать ТТН"
+            :title="scannerTitle"
             :value="documentNumber"
             @input="onInput"
             @decode="onDecode"

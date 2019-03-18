@@ -6,6 +6,7 @@
         <scanner
             title="VIN-номер"
             button-title="Сканировать VIN"
+            :paused="isScannerPaused"
             :value="VIN"
             @input="onInput"
             @decode="onDecode"
@@ -96,6 +97,7 @@ export default {
         carList: [],
         VIN: '',
         isCarCheckSubmitted: false,
+        isScannerPaused: false,
         modal: {
             heading: '',
             message: '',
@@ -200,6 +202,7 @@ export default {
             }
 
             this.modal.isShown = true;
+            this.isScannerPaused = true;
         },
         processResult() {
             if (this.isCarListChecked) {
@@ -212,6 +215,7 @@ export default {
             }
 
             this.VIN = '';
+            this.isScannerPaused = false;
         },
     },
     beforeRouteLeave(to, from, next) {

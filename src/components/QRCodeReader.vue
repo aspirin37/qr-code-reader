@@ -2,6 +2,7 @@
     <div class="qr-reader">
         <qrcode-stream
             class="mb-3"
+            :paused="paused"
             @decode="onDecode"
             @init="onInit"
         />
@@ -16,12 +17,28 @@ export default {
     components: {
         QrcodeStream,
     },
+    props: {
+        paused: {
+            type: Boolean,
+            default: false,
+        },
+    },
     data: () => ({
+        cachedResult: null,
         loader: true,
     }),
     methods: {
         onDecode(result) {
             if (result) {
+                if (this.cachedResult === result) {
+                    this.$store.commit(
+                        'showErrorMessage',
+                        'Номер уже отсканирован!',
+                    );
+                    return;
+                }
+
+                this.cachedResult = result;
                 setTimeout(() => {
                     this.$emit('decode', result);
                 }, 500);
