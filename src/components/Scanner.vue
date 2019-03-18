@@ -1,19 +1,25 @@
 <template>
     <div>
         <template>
-            <div class="form-group">
-                <div class="d-flex align-items-baseline">
-                    <label class="mr-auto">
-                        {{ title }}:
-                    </label>
-                </div>
+            <form
+                class="input-group mb-3"
+                @submit.prevent="showPassModal"
+            >
                 <input
                     ref="input"
                     v-model="result"
                     class="form-control"
-                    @input="onInput"
+                    :placeholder="title"
                 >
-            </div>
+                <div class="input-group-append">
+                    <button
+                        class="btn btn-outline-secondary"
+                        type="submit"
+                    >
+                        Ввод
+                    </button>
+                </div>
+            </form>
             <button
                 class="w-100 btn btn-scan"
                 type="button"
@@ -34,6 +40,19 @@
                 @decode="onDecode"
             />
         </transition>
+        <b-modal
+            v-model="isPassModalShown"
+            class="text-center"
+            title="Введите ключ доступа"
+            centered
+            @ok="onManualInput"
+        >
+            <input
+                v-model="manualInputPass"
+                class="form-control"
+                placeholder="Ключ доступа"
+            >
+        </b-modal>
     </div>
 </template>
 
@@ -62,9 +81,11 @@ export default {
     },
     data: () => ({
         result: '',
+        manualInputPass: null,
+        isPassModalShown: false,
     }),
     computed: {
-        ...mapState(['isScanScreenShown']),
+        ...mapState(['isScanScreenShown', 'user']),
     },
     watch: {
         value(val) {
@@ -76,8 +97,17 @@ export default {
             this.loader = true;
             this.$store.commit('showScanScreen');
         },
-        onInput() {
-            this.$emit('input', this.result);
+        showPassModal() {
+            this.isPassModalShown = true;
+        },
+        onManualInput() {
+            if (this.user.area.manualInputPass === this.manualInputPass) {
+                this.$emit('input', this.result);
+                this.result = '';
+            } else {
+                this.$store.commit('showErrorMessage', 'Неверный код доступа!');
+                this.manualInputPass = null;
+            }
         },
         onDecode(result) {
             this.result = result;
@@ -101,5 +131,9 @@ export default {
         position: relative;
         top: -1px;
     }
+}
+
+.input-group-append button {
+    font-size: 1rem;
 }
 </style>
