@@ -3,7 +3,6 @@
         <scanner
             title="VIN-номер"
             button-title="Сканировать VIN"
-            :value="VIN"
             @input="onInput"
             @decode="onDecode"
         />
@@ -63,16 +62,19 @@ export default {
         ...mapState(['isScanScreenShown']),
     },
     methods: {
-        async acceptShipment() {
+        async acceptShipment(manualInput = false) {
             const params = {
                 ...this.car,
+                manualInput,
                 status: 'compound in',
             };
             await this.$http.put(`cars/${this.VIN}`, params);
             this.isSuccessModalShown = true;
         },
-        onInput(result) {
+        async onInput(result) {
             this.VIN = result;
+            this.car = await this.$http.get(`cars/${this.VIN}`);
+            this.acceptShipment(true);
         },
         async onDecode(result) {
             this.VIN = result;

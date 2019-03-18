@@ -15,6 +15,7 @@
                     <button
                         class="btn btn-outline-secondary"
                         type="submit"
+                        :disabled="!result"
                     >
                         Ввод
                     </button>
@@ -43,14 +44,15 @@
         <b-modal
             v-model="isPassModalShown"
             class="text-center"
-            title="Введите ключ доступа"
+            title="Введите код доступа"
+            cancel-title="Отмена"
             centered
             @ok="onManualInput"
         >
             <input
                 v-model="manualInputPass"
                 class="form-control"
-                placeholder="Ключ доступа"
+                placeholder="Код доступа"
             >
         </b-modal>
     </div>
@@ -74,10 +76,6 @@ export default {
             type: String,
             required: true,
         },
-        value: {
-            type: String,
-            default: '',
-        },
     },
     data: () => ({
         result: '',
@@ -86,11 +84,6 @@ export default {
     }),
     computed: {
         ...mapState(['isScanScreenShown', 'user']),
-    },
-    watch: {
-        value(val) {
-            this.result = val;
-        },
     },
     methods: {
         startScanning() {
@@ -106,8 +99,9 @@ export default {
                 this.result = '';
             } else {
                 this.$store.commit('showErrorMessage', 'Неверный код доступа!');
-                this.manualInputPass = null;
             }
+
+            this.manualInputPass = null;
         },
         onDecode(result) {
             this.result = result;
@@ -135,5 +129,12 @@ export default {
 
 .input-group-append button {
     font-size: 1rem;
+
+    &:active,
+    &:focus,
+    &:hover {
+        color: #6c757d !important;
+        background-color: transparent !important;
+    }
 }
 </style>

@@ -7,7 +7,6 @@
             title="VIN-номер"
             button-title="Сканировать VIN"
             :paused="isScannerPaused"
-            :value="VIN"
             @input="onInput"
             @decode="onDecode"
         />
@@ -179,10 +178,7 @@ export default {
 
             this.$store.commit('changeScannedDocument', null);
         },
-        onInput(result) {
-            this.VIN = result;
-        },
-        onDecode(result) {
+        updateCarStatus(result, manualInput = '') {
             this.VIN = result;
 
             const scannedCar = this.carList.find(it => it.VIN === result);
@@ -190,19 +186,33 @@ export default {
             if (scannedCar) {
                 if (scannedCar.status !== 'pre-scan') {
                     scannedCar.status = 'pre-scan';
-                    this.modal.heading = 'VIN-номер';
-                    this.modal.message = result;
+                    scannedCar.manualInput = manualInput;
+
+                    if (!manualInput) {
+                        this.modal.heading = 'VIN-номер';
+                        this.modal.message = result;
+
+                        this.modal.isShown = true;
+                        this.isScannerPaused = true;
+                    }
                 } else {
-                    this.modal.heading = '';
-                    this.modal.message = `VIN-номер ${result} уже отсканирован!`;
+                    this.$store.commit(
+                        'showErrorMessage',
+                        `VIN-номер ${result} уже отсканирован!`,
+                    );
                 }
             } else {
-                this.modal.heading = '';
-                this.modal.message = `Нет совпадений по номеру ${result}`;
+                this.$store.commit(
+                    'showErrorMessage',
+                    `Нет совпадений по номеру ${result}`,
+                );
             }
-
-            this.modal.isShown = true;
-            this.isScannerPaused = true;
+        },
+        onInput(result) {
+            this.updateCarStatus(result, true);
+        },
+        onDecode(result) {
+            this.updateCarStatus(result);
         },
         processResult() {
             if (this.isCarListChecked) {

@@ -3,7 +3,6 @@
         <scanner
             button-title="Сканировать ТТН"
             :title="scannerTitle"
-            :value="documentNumber"
             @input="onInput"
             @decode="onDecode"
         />
@@ -49,17 +48,26 @@ export default {
         async goToCarList() {
             this.$store.commit('hideScanScreen');
             this.$router.push('/car-list');
-            this.$store.commit('changeScannedDocument', this.document);
         },
-        onInput(result) {
-            this.documentNumber = result;
-        },
-        async onDecode(result) {
+        async getDocument(result, manualInput) {
             this.documentNumber = result;
             this.document = await this.$http.get(
                 `documents/number/${this.documentNumber}`,
             );
-            this.isSuccessModalShown = true;
+
+            this.$store.commit('changeScannedDocument', this.document);
+
+            if (manualInput) {
+                this.$router.push('/car-list');
+            } else {
+                this.isSuccessModalShown = true;
+            }
+        },
+        onInput(result) {
+            this.getDocument(result, true);
+        },
+        onDecode(result) {
+            this.getDocument(result, false);
         },
     },
     beforeRouteLeave(to, from, next) {

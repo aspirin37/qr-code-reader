@@ -3,7 +3,6 @@
         <scanner
             :title="scannerTitle"
             button-title="Сканировать ТТН"
-            :value="documentNumber"
             @input="onInput"
             @decode="onDecode"
         />
