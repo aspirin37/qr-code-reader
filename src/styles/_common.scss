@@ -90,3 +90,7 @@ body {
         height: calc(100vh - (0.5rem * 2) - 56px);
     }
 }
+
+.router-link-active {
+    background-color: rgba(0, 0, 0, 0.05);
+}

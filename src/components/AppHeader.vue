@@ -49,6 +49,11 @@ export default {
                 role: 'pre-scan',
             },
             {
+                label: 'Документы в работе',
+                link: '/documents-at-work',
+                role: 'atWork',
+            },
+            {
                 label: 'Подтверждение отгрузки',
                 link: '/shipment-confirmation',
                 role: 'dispatch',
@@ -57,11 +62,6 @@ export default {
                 label: 'Подтверждение приемки',
                 link: '/shipment-acceptance',
                 role: 'CompoundIn',
-            },
-            {
-                label: 'Документы в работе',
-                link: '/documents-at-work',
-                role: 'atWork',
             },
         ],
     }),
@@ -127,6 +127,11 @@ header {
         font-size: 22px;
         color: inherit;
         text-decoration: none;
+        transition-delay: 0.15s;
+
+        &.router-link-active {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
 
         &--logout {
             margin-top: auto;
