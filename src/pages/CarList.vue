@@ -6,6 +6,7 @@
         <scanner
             title="VIN-номер"
             button-title="Сканировать VIN"
+            :paused="isScannerPaused"
             :value="VIN"
             @input="onInput"
             @decode="onDecode"
@@ -15,7 +16,7 @@
             :disabled="!isCarListChecked"
             @click="checkCarList"
         >
-            Подтвердить проверку
+            Подтвердить сканирование
         </button>
         <ul class="list-group">
             <li
@@ -96,6 +97,7 @@ export default {
         carList: [],
         VIN: '',
         isCarCheckSubmitted: false,
+        isScannerPaused: false,
         modal: {
             heading: '',
             message: '',
@@ -174,6 +176,8 @@ export default {
             this.modal.heading = '';
             this.isCarCheckSubmitted = true;
             this.modal.isShown = true;
+
+            this.$store.commit('changeScannedDocument', null);
         },
         onInput(result) {
             this.VIN = result;
@@ -198,6 +202,7 @@ export default {
             }
 
             this.modal.isShown = true;
+            this.isScannerPaused = true;
         },
         processResult() {
             if (this.isCarListChecked) {
@@ -210,6 +215,7 @@ export default {
             }
 
             this.VIN = '';
+            this.isScannerPaused = false;
         },
     },
     beforeRouteLeave(to, from, next) {
