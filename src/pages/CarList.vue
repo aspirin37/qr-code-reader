@@ -15,7 +15,7 @@
             :disabled="!isCarListChecked"
             @click="checkCarList"
         >
-            Подтвердить проверку
+            Подтвердить сканирование
         </button>
         <ul class="list-group">
             <li
