@@ -7,14 +7,6 @@
             @input="onInput"
             @decode="onDecode"
         />
-        <!-- <button
-            ref="button-next"
-            class="w-100 btn btn-success"
-            :disabled="!documentNumber"
-            @click="goToCarList"
-        >
-            Далее
-        </button> -->
         <b-modal
             v-model="isSuccessModalShown"
             class="text-center"
