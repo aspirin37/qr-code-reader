@@ -7,14 +7,14 @@
             @input="onInput"
             @decode="onDecode"
         />
-        <button
+        <!-- <button
             ref="button-next"
             class="w-100 btn btn-success"
             :disabled="!documentNumber"
             @click="goToCarList"
         >
             Далее
-        </button>
+        </button> -->
         <b-modal
             v-model="isSuccessModalShown"
             class="text-center"
@@ -23,7 +23,7 @@
             ok-variant="success"
             ok-only
             centered
-            @hidden="hideScanScreen"
+            @hidden="goToCarList"
         >
             <h4 class="font-weight-normal">
                 {{ scannerTitle }}
@@ -55,24 +55,19 @@ export default {
     },
     methods: {
         async goToCarList() {
-            this.document = await this.$http.get(
-                `documents/number/${this.documentNumber}`,
-            );
-
+            this.$store.commit('hideScanScreen');
             this.$router.push('/car-list');
             this.$store.commit('changeScannedDocument', this.document);
         },
         onInput(result) {
             this.documentNumber = result;
-            this.isManual = true;
         },
-        onDecode(result) {
+        async onDecode(result) {
             this.documentNumber = result;
-            this.isManual = false;
+            this.document = await this.$http.get(
+                `documents/number/${this.documentNumber}`,
+            );
             this.isSuccessModalShown = true;
-        },
-        hideScanScreen() {
-            this.$store.commit('hideScanScreen');
         },
     },
     beforeRouteLeave(to, from, next) {
