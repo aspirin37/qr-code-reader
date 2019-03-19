@@ -11,6 +11,7 @@
             class="text-center"
             header-border-variant="success"
             title="Готово!"
+            ok-title="Продолжить"
             ok-variant="success"
             ok-only
             centered

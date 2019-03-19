@@ -104,8 +104,7 @@ export default {
             this.manualInputPass = null;
         },
         onDecode(result) {
-            this.result = result;
-            this.$emit('decode', this.result);
+            this.$emit('decode', result);
         },
     },
 };
