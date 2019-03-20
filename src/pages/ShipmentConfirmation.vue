@@ -3,25 +3,22 @@
         <scanner
             :title="scannerTitle"
             button-title="Сканировать ТТН"
-            :value="documentNumber"
             @input="onInput"
             @decode="onDecode"
         />
         <div class="d-flex justify-content-between">
             <button
-                class="btn btn-warning btn-action mb-3"
-                :disabled="!documentList.length"
-                @click="resetData"
-            >
-                Сбросить
-            </button>
-            <button
-                class=" btn btn-success btn-action mb-3"
+                class=" btn btn-success btn-submit mb-3"
                 :disabled="!isDocumentListChecked"
                 @click="checkDocumentList"
             >
-                Подтвердить
+                Подтвердить отгрузку
             </button>
+            <button
+                class="btn btn-warning btn-update mb-3"
+                :disabled="!documentList.length"
+                @click="resetData"
+            />
         </div>
         <ul class="list-group">
             <li
@@ -39,7 +36,10 @@
                 </b>
             </li>
         </ul>
-        <div v-if="isDocumentListLoading">
+        <div
+            v-if="isDocumentListLoading"
+            class="loading-doсuments"
+        >
             Loading list...
         </div>
         <b-modal
@@ -117,7 +117,7 @@ export default {
         },
     },
     methods: {
-        async getDocument(documentNumber) {
+        async getDocument(documentNumber, manualInput = false) {
             this.isDocumentLoading = true;
             this.document = await this.$http
                 .get(`documents/number/${documentNumber}`)
@@ -126,8 +126,11 @@ export default {
                 });
 
             this.document.status = 'compound out';
-            this.modal.message = documentNumber;
-            this.modal.isShown = true;
+
+            if (!manualInput) {
+                this.modal.message = documentNumber;
+                this.modal.isShown = true;
+            }
         },
         async getDocumentList(documentNumber) {
             if (this.document.lotId) {
@@ -211,6 +214,12 @@ export default {
         },
         async onInput(result) {
             this.documentNumber = result;
+            if (!this.documentList.length && !this.isDocumentLoading) {
+                await this.getDocument(result, true);
+                await this.getDocumentList(result);
+            } else {
+                this.checkDocument(result, true);
+            }
         },
         async onDecode(result) {
             this.documentNumber = result;
@@ -221,7 +230,7 @@ export default {
                 this.checkDocument(result);
             }
         },
-        checkDocument(documentNumber) {
+        checkDocument(documentNumber, manualInput = false) {
             const scannedDocument = this.documentList.find(
                 it => it.number === documentNumber,
             );
@@ -240,7 +249,7 @@ export default {
                 this.modal.message = `Нет совпадений по номеру ${documentNumber}`;
             }
 
-            this.modal.isShown = true;
+            if (!manualInput) this.modal.isShown = true;
         },
         processResult() {
             if (this.isDocumentListLoading) {
@@ -276,7 +285,15 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.btn-action {
-    width: 49%;
+.btn-submit {
+    flex-grow: 1;
+    margin-right: 0.5rem;
+}
+
+.btn-update {
+    width: 60px;
+    background-image: url('../assets/update.svg');
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
 }
 </style>
