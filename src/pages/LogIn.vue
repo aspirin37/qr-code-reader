@@ -1,6 +1,9 @@
 <template>
-    <div class="page text-center">
-        loading...
+    <div class="text-center">
+        <b-spinner
+            type="grow"
+            label="Spinning"
+        />
     </div>
 </template>
 

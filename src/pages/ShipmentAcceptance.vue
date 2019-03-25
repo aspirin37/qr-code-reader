@@ -17,7 +17,7 @@
             cancel-title="Отмена"
             cancel-variant="danger"
             centered
-            @ok="acceptShipment"
+            @ok="acceptShipment(false)"
             @hidden="hideScanScreen"
         >
             <h4 class="font-weight-normal">
@@ -62,12 +62,13 @@ export default {
         ...mapState(['isScanScreenShown']),
     },
     methods: {
-        async acceptShipment(manualInput = false) {
+        async acceptShipment(manualInput) {
             const params = {
                 ...this.car,
                 manualInput,
                 status: 'compound in',
             };
+            console.log(params);
             await this.$http.put(`cars/${this.VIN}`, params);
             this.isSuccessModalShown = true;
         },
