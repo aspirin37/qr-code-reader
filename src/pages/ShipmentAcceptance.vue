@@ -17,7 +17,7 @@
             cancel-title="Отмена"
             cancel-variant="danger"
             centered
-            @ok="acceptShipment(false)"
+            @ok="acceptShipment(isManualInput)"
             @hidden="hideScanScreen"
         >
             <h4 class="font-weight-normal">
@@ -55,6 +55,7 @@ export default {
     data: () => ({
         isScanModalShown: false,
         isSuccessModalShown: false,
+        isManualInput: false,
         VIN: '',
         car: null,
     }),
@@ -74,11 +75,13 @@ export default {
         async onInput(result) {
             this.VIN = result;
             this.car = await this.$http.get(`cars/${this.VIN}`);
-            this.acceptShipment(true);
+            this.isManualInput = true;
+            this.isScanModalShown = true;
         },
         async onDecode(result) {
             this.VIN = result;
             this.car = await this.$http.get(`cars/${this.VIN}`);
+            this.isManualInput = false;
             this.isScanModalShown = true;
         },
         hideScanScreen() {
