@@ -1,10 +1,5 @@
 <template>
-    <div class="text-center">
-        <b-spinner
-            type="grow"
-            label="Spinning"
-        />
-    </div>
+    <div />
 </template>
 
 <script>

@@ -3,6 +3,7 @@
         <scanner
             :title="scannerTitle"
             button-title="Сканировать ТТН"
+            :paused="isScannerPaused"
             @input="onInput"
             @decode="onDecode"
         />
@@ -72,7 +73,7 @@
                     v-if="isDocumentListLoading"
                     class="loading-doсuments"
                 >
-                    loading...
+                    Загрузка
                 </span>
             </p>
         </b-modal>
@@ -97,8 +98,7 @@ export default {
         documentList: [],
         areaPassNumber: null,
         documentsCheckSubmitted: false,
-        loader: true,
-        isManual: false,
+        isScannerPaused: false,
         modal: {
             heading: 'Документ',
             message: '',
@@ -132,10 +132,11 @@ export default {
 
             if (!manualInput) {
                 this.modal.message = documentNumber;
+                this.isScannerPaused = true;
                 this.modal.isShown = true;
             }
         },
-        async getDocumentList(documentNumber) {
+        async getDocumentList(documentNumber, manualInput) {
             if (this.document.lotId) {
                 this.isDocumentListLoading = true;
                 const whenDocumentListIsLoaded = this.$http.get(
@@ -170,6 +171,12 @@ export default {
                     it => it.number === documentNumber,
                 );
                 scannedDocument.status = 'compound out';
+
+                if (!this.manualInput) {
+                    this.isScannerPaused = true;
+                } else {
+                    scannedDocument.manualInput = true;
+                }
             } else {
                 this.documentList.push(this.document);
             }
@@ -219,7 +226,7 @@ export default {
             this.documentNumber = result;
             if (!this.documentList.length && !this.isDocumentLoading) {
                 await this.getDocument(result, true);
-                await this.getDocumentList(result);
+                await this.getDocumentList(result, true);
             } else {
                 this.checkDocument(result, true);
             }
@@ -243,16 +250,21 @@ export default {
                     scannedDocument.status = 'compound out';
                     this.modal.heading = 'Документ';
                     this.modal.message = documentNumber;
+                    this.modal.isShown = true;
                 } else {
-                    this.modal.heading = '';
-                    this.modal.message = `Документ ${documentNumber} уже отсканирован!`;
+                    this.$store.commit(
+                        'showErrorMessage',
+                        `Документ ${documentNumber} уже отсканирован!`,
+                    );
                 }
             } else {
                 this.modal.heading = '';
                 this.modal.message = `Нет совпадений по номеру ${documentNumber}`;
             }
 
-            if (!manualInput) this.modal.isShown = true;
+            if (manualInput) {
+                this.isScannerPaused = true;
+            }
         },
         processResult() {
             if (this.isDocumentListLoading) {
@@ -269,6 +281,7 @@ export default {
             }
 
             this.documentNumber = '';
+            this.isScannerPaused = false;
         },
         hideScanScreen() {
             this.$store.commit('hideScanScreen');
@@ -298,5 +311,29 @@ export default {
     background-image: url('../assets/update.svg');
     background-position: 50% 50%;
     background-repeat: no-repeat;
+}
+
+.loading-doсuments:after {
+    content: '.';
+    animation: dots 2s steps(5, end) infinite;
+}
+
+@keyframes dots {
+    0%,
+    20% {
+        color: rgba(0, 0, 0, 0);
+        text-shadow: 0.25em 0 0 rgba(0, 0, 0, 0), 0.5em 0 0 rgba(0, 0, 0, 0);
+    }
+    40% {
+        color: #343a40;
+        text-shadow: 0.25em 0 0 rgba(0, 0, 0, 0), 0.5em 0 0 rgba(0, 0, 0, 0);
+    }
+    60% {
+        text-shadow: 0.25em 0 0 #343a40, 0.5em 0 0 rgba(0, 0, 0, 0);
+    }
+    80%,
+    100% {
+        text-shadow: 0.25em 0 0 #343a40, 0.5em 0 0 #343a40;
+    }
 }
 </style>

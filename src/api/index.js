@@ -1,20 +1,21 @@
 import axios from 'axios';
 import store from '../store';
 
-const headers = process.env.API_TOKEN ? { 'Ocp-Apim-Subscription-Key': process.env.API_TOKEN } : null;
+const headers = {
+    'Ocp-Apim-Subscription-Key': process.env.API_TOKEN || null,
+};
 
 const axiosInstance = axios.create({
     baseURL: process.env.API_URL,
     withCredentials: true,
     headers,
-    // auth: {
-    //     username: 'TESTMAI2',
-    //     password: 'Test1114',
-    // },
 });
 
 axiosInstance.interceptors.request.use(
-    config => config,
+    config => {
+        store.commit('showPageLoader');
+        return config;
+    },
     error => {
         store.commit('showErrorMessage', error.message);
         return Promise.reject(error);
@@ -22,10 +23,14 @@ axiosInstance.interceptors.request.use(
 );
 
 axiosInstance.interceptors.response.use(
-    response => response.data,
+    response => {
+        store.commit('hidePageLoader');
+        return response.data;
+    },
     error => {
         const message = error.response && error.response.data.Error ? error.response.data.Error.message : error.message;
         store.commit('showErrorMessage', message);
+        store.commit('hidePageLoader');
         return Promise.reject(error);
     },
 );

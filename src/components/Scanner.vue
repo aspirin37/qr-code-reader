@@ -38,6 +38,7 @@
         <transition name="fade">
             <qrcode-reader
                 v-if="isScanScreenShown"
+                :paused="paused"
                 @decode="onDecode"
             />
         </transition>
@@ -76,6 +77,10 @@ export default {
             type: String,
             required: true,
         },
+        paused: {
+            type: Boolean,
+            default: false,
+        },
     },
     data: () => ({
         result: '',
@@ -95,7 +100,7 @@ export default {
         },
         onManualInput() {
             if (this.user.area.manualInputPass === this.manualInputPass) {
-                this.$emit('input', this.result);
+                this.$emit('input', this.result.trim());
                 this.result = '';
             } else {
                 this.$store.commit('showErrorMessage', 'Неверный код доступа!');
@@ -104,7 +109,7 @@ export default {
             this.manualInputPass = null;
         },
         onDecode(result) {
-            this.$emit('decode', result);
+            this.$emit('decode', result.trim());
         },
     },
 };

@@ -68,7 +68,6 @@ export default {
                 manualInput,
                 status: 'compound in',
             };
-            console.log(params);
             await this.$http.put(`cars/${this.VIN}`, params);
             this.isSuccessModalShown = true;
         },
