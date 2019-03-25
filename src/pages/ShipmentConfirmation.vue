@@ -6,7 +6,10 @@
             @input="onInput"
             @decode="onDecode"
         />
-        <div class="d-flex justify-content-between">
+        <div
+            v-if="documentList && documentList.length"
+            class="d-flex justify-content-between"
+        >
             <button
                 class=" btn btn-success btn-submit mb-3"
                 :disabled="!isDocumentListChecked"

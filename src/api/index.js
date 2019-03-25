@@ -7,6 +7,10 @@ const axiosInstance = axios.create({
     baseURL: process.env.API_URL,
     withCredentials: true,
     headers,
+    // auth: {
+    //     username: 'TESTMAI2',
+    //     password: 'Test1114',
+    // },
 });
 
 axiosInstance.interceptors.request.use(
