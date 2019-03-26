@@ -9,10 +9,18 @@ const axiosInstance = axios.create({
     headers,
 });
 
+const trackError = error => {
+    if (window.appInsights) {
+        window.appInsights.trackException(error, 'API handler');
+    }
+};
+
 axiosInstance.interceptors.request.use(
     config => config,
     error => {
         store.commit('showErrorMessage', error.message);
+        trackError(error);
+
         return Promise.reject(error);
     },
 );
@@ -20,8 +28,12 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
     response => response.data,
     error => {
-        const message = error.response.data.Error ? error.response.data.Error.message : error.message;
+        const message = error.response && error.response.data.Error ? error.response.data.Error.message : error.message;
+
         store.commit('showErrorMessage', message);
+        store.commit('hidePageLoader');
+        trackError(error);
+
         return Promise.reject(error);
     },
 );
