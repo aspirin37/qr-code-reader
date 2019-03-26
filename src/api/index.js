@@ -31,7 +31,6 @@ axiosInstance.interceptors.response.use(
         const message = error.response && error.response.data.Error ? error.response.data.Error.message : error.message;
 
         store.commit('showErrorMessage', message);
-        store.commit('hidePageLoader');
         trackError(error);
 
         return Promise.reject(error);
