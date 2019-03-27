@@ -61,7 +61,6 @@ export default {
                     }
 
                     this.$store.commit('showErrorMessage', errorMessage)
-
                     window.appInsights.trackException(error, 'camera error handler', { errorMessage });
                 });
         },

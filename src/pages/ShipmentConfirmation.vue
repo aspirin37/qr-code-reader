@@ -109,10 +109,7 @@ export default {
     computed: {
         ...mapState(['user', 'isScanScreenShown']),
         isDocumentListChecked() {
-            return (
-                this.documentList.length &&
-                this.documentList.every(it => it.status === 'compound out')
-            );
+            return this.documentList.length && this.documentList.every(it => it.status === 'compound out');
         },
         documentsChecked() {
             // prettier-ignore
@@ -122,11 +119,9 @@ export default {
     methods: {
         async getDocument(documentNumber, manualInput = false) {
             this.isDocumentLoading = true;
-            this.document = await this.$http
-                .get(`documents/number/${documentNumber}`)
-                .finally(() => {
-                    this.isDocumentLoading = false;
-                });
+            this.document = await this.$http.get(`documents/number/${documentNumber}`).finally(() => {
+                this.isDocumentLoading = false;
+            });
 
             this.document.status = 'compound out';
 
@@ -139,26 +134,21 @@ export default {
         async getDocumentList(documentNumber, manualInput) {
             if (this.document.lotId) {
                 this.isDocumentListLoading = true;
-                const whenDocumentListIsLoaded = this.$http.get(
-                    `lots/${this.document.lotId}/documents`,
-                );
+                const whenDocumentListIsLoaded = this.$http.get(`lots/${this.document.lotId}/documents`);
 
                 const whenAreaPassNumberIsLoaded = (async () => {
                     let areaPassNumber = null;
                     if (this.user.area.passRequired) {
-                        ({ areaPassNumber } = await this.$http.get(
-                            `lots/${this.document.lotId}`,
-                        ));
+                        ({ areaPassNumber } = await this.$http.get(`lots/${this.document.lotId}`));
                     }
                     return areaPassNumber;
                 })();
 
-                const [documentList, areaPassNumber] = await Promise.all([
-                    whenDocumentListIsLoaded,
-                    whenAreaPassNumberIsLoaded,
-                ]).finally(() => {
-                    this.isDocumentListLoading = false;
-                });
+                const [documentList, areaPassNumber] = await Promise.all([whenDocumentListIsLoaded, whenAreaPassNumberIsLoaded]).finally(
+                    () => {
+                        this.isDocumentListLoading = false;
+                    },
+                );
 
                 documentList.forEach(it => {
                     it.status = '';
@@ -167,12 +157,10 @@ export default {
                 this.documentList = documentList;
                 this.areaPassNumber = areaPassNumber;
 
-                const scannedDocument = this.documentList.find(
-                    it => it.number === documentNumber,
-                );
+                const scannedDocument = this.documentList.find(it => it.number === documentNumber);
                 scannedDocument.status = 'compound out';
 
-                if (!this.manualInput) {
+                if (!manualInput) {
                     this.isScannerPaused = true;
                 } else {
                     scannedDocument.manualInput = true;
@@ -241,9 +229,7 @@ export default {
             }
         },
         checkDocument(documentNumber, manualInput = false) {
-            const scannedDocument = this.documentList.find(
-                it => it.number === documentNumber,
-            );
+            const scannedDocument = this.documentList.find(it => it.number === documentNumber);
 
             if (scannedDocument) {
                 if (scannedDocument.status !== 'compound out') {
@@ -252,10 +238,7 @@ export default {
                     this.modal.message = documentNumber;
                     this.modal.isShown = true;
                 } else {
-                    this.$store.commit(
-                        'showErrorMessage',
-                        `Документ ${documentNumber} уже отсканирован!`,
-                    );
+                    this.$store.commit('showErrorMessage', `Документ ${documentNumber} уже отсканирован!`);
                 }
             } else {
                 this.modal.heading = '';
