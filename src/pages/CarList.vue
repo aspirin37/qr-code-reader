@@ -1,7 +1,7 @@
 <template>
     <div
-        v-if="!loader"
         class="page"
+        v-if="!loader"
     >
         <scanner
             title="VIN-номер"
@@ -97,6 +97,7 @@ export default {
         VIN: '',
         isCarCheckSubmitted: false,
         isScannerPaused: false,
+        loader: true,
         modal: {
             heading: '',
             message: '',

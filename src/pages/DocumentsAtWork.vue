@@ -26,12 +26,6 @@
             >
                 Нет документов в работе.
             </div>
-            <div
-                v-if="!documentList"
-                class="mock-text"
-            >
-                loading...
-            </div>
         </transition>
     </div>
 </template>

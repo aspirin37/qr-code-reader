@@ -1,7 +1,10 @@
 import axios from 'axios';
 import store from '../store';
+import trackError from './track-error';
 
-const headers = process.env.API_TOKEN ? { 'Ocp-Apim-Subscription-Key': process.env.API_TOKEN } : null;
+const headers = {
+    'Ocp-Apim-Subscription-Key': process.env.API_TOKEN || null,
+};
 
 const axiosInstance = axios.create({
     baseURL: process.env.API_URL,
@@ -9,14 +12,11 @@ const axiosInstance = axios.create({
     headers,
 });
 
-const trackError = error => {
-    if (window.appInsights) {
-        window.appInsights.trackException(error, 'API handler');
-    }
-};
-
 axiosInstance.interceptors.request.use(
-    config => config,
+    config => {
+        store.commit('showPageLoader');
+        return config;
+    },
     error => {
         store.commit('showErrorMessage', error.message);
         trackError(error);
@@ -26,11 +26,15 @@ axiosInstance.interceptors.request.use(
 );
 
 axiosInstance.interceptors.response.use(
-    response => response.data,
+    response => {
+        store.commit('hidePageLoader');
+        return response.data;
+    },
     error => {
         const message = error.response && error.response.data.Error ? error.response.data.Error.message : error.message;
 
         store.commit('showErrorMessage', message);
+        store.commit('hidePageLoader');
         trackError(error);
 
         return Promise.reject(error);

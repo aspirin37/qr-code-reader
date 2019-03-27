@@ -38,7 +38,6 @@ export default {
         scannerTitle: 'Номер ТТН',
         documentNumber: '',
         document: null,
-        loader: true,
         isManual: false,
         isSuccessModalShown: false,
     }),
