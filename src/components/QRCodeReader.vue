@@ -59,7 +59,10 @@ export default {
                     default:
                         errorMessage = 'Неизвестаня ошибка';
                     }
+
                     this.$store.commit('showErrorMessage', errorMessage)
+
+                    window.appInsights.trackException(error, 'camera error handler', { errorMessage });
                 });
         },
     },
