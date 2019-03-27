@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import bModal from 'bootstrap-vue/es/components/modal/modal';
+import BSpinner from 'bootstrap-vue/es/components/spinner/spinner';
 import VueAppInsights from './application-insights';
 
 import App from './App';
@@ -23,6 +24,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 Vue.component('b-modal', bModal);
+Vue.component('b-spinner', BSpinner);
 Vue.prototype.$http = axiosInstance;
 
 /* eslint-disable no-new */

@@ -18,17 +18,20 @@
                 {{ errorMessage }}
             </div>
         </b-modal>
+        <page-loader v-if="isPageLoaderShown" />
     </div>
 </template>
 
 <script>
 import AppHeader from '@/components/AppHeader';
+import PageLoader from '@/components/PageLoader';
 import { mapState } from 'vuex';
 
 export default {
     name: 'App',
     components: {
         AppHeader,
+        PageLoader,
     },
     data: () => ({
         isModalShown: false,
@@ -39,6 +42,7 @@ export default {
             'isScanScreenShown',
             'errorMessage',
             'isErrorShown',
+            'isPageLoaderShown',
         ]),
         app100vh: vm => ({
             'app--100vh': vm.isMenuShown || vm.isScanScreenShown,

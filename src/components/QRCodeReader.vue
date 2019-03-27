@@ -23,35 +23,18 @@ export default {
             default: false,
         },
     },
-    data: () => ({
-        cachedResult: null,
-        loader: true,
-    }),
     methods: {
         onDecode(result) {
             if (result) {
-                if (this.cachedResult === result) {
-                    this.$store.commit(
-                        'showErrorMessage',
-                        'Номер уже отсканирован!',
-                    );
-                    return;
-                }
-
-                this.cachedResult = result;
                 setTimeout(() => {
-                    this.$emit('decode', result);
+                    this.$emit('decode', result.trim());
                 }, 500);
             }
         },
         async onInit(promise) {
             /* eslint-disable */
             // prettier-ignore
-            promise
-                .then(() => {
-                    this.loader = false;
-                })
-                .catch(error => {
+            promise.catch(error => {
                     let errorMessage;
 
                     switch (error.name) {

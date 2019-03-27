@@ -11,6 +11,7 @@ const store = new Vuex.Store({
         errorMessage: '',
         isErrorShown: false,
         isScanScreenShown: false,
+        isPageLoaderShown: false,
         scannedDocument: null,
     },
 
@@ -50,6 +51,12 @@ const store = new Vuex.Store({
             state.isScanScreenShown = false;
             state.errorMessage = '';
             state.isErrorShown = false;
+        },
+        showPageLoader: state => {
+            state.isPageLoaderShown = true;
+        },
+        hidePageLoader: state => {
+            state.isPageLoaderShown = false;
         },
     },
 });
