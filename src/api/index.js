@@ -19,6 +19,7 @@ axiosInstance.interceptors.request.use(
     },
     error => {
         store.commit('showErrorMessage', error.message);
+        store.commit('hidePageLoader');
         trackError(error);
 
         return Promise.reject(error);

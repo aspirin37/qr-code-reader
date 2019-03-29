@@ -61,7 +61,7 @@ export default {
             {
                 label: 'Подтверждение приемки',
                 link: '/shipment-acceptance',
-                role: 'CompoundIn',
+                role: 'CompoundIn'
             },
         ],
     }),
