@@ -205,7 +205,7 @@ export default {
             } else {
                 this.$store.commit(
                     'showErrorMessage',
-                    `Нет совпадений по номеру ${result}`,
+                    `VIN-номер ${result} отсутствует в списке`,
                 );
             }
         },
